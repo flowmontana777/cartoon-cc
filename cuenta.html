@@ -145,7 +145,19 @@
     }
   });
 
-  client.auth.onAuthStateChange((event, session) => {
+  client.auth.onAuthStateChange(async (event, session) => {
+    if (event === "PASSWORD_RECOVERY" && session) {
+      const nextPassword = window.prompt("Escribe tu nueva contraseña (mínimo 8 caracteres):");
+      if (nextPassword && nextPassword.length >= 8) {
+        const { error } = await client.auth.updateUser({ password: nextPassword });
+        if (error) window.alert(error.message);
+        else window.alert("Contraseña actualizada. Ya puedes entrar a tu cuenta.");
+      } else if (nextPassword !== null) {
+        window.alert("La contraseña debe tener al menos 8 caracteres.");
+      }
+      showAccount(session.user);
+      return;
+    }
     if (session && session.user) showAccount(session.user);
     else if (event === "SIGNED_OUT") showAuth();
   });
