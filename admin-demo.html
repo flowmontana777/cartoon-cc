@@ -3,7 +3,7 @@
 <style>
 :root{--bg:#0b0d0b;--panel:#141914;--line:#293329;--green:#b7ff45;--muted:#9aa394;--white:#f4f7ef}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,system-ui,Arial}.shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh}.side{background:#101510;border-right:1px solid #283128;padding:25px 17px}.brand{font-size:19px;font-weight:950;margin:0 0 38px}.brand em{font-style:normal;color:var(--green)}.nav a{display:block;padding:12px;border-radius:9px;color:#aab5a4;font-size:12px;margin:5px 0;text-decoration:none}.nav a.active{background:#202b1b;color:var(--green)}.main{padding:32px;max-width:1300px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.eyebrow{font-size:10px;color:var(--green);font-weight:900;letter-spacing:2px}.top h1{font-size:29px;letter-spacing:-1px;margin:8px 0}.back{font-size:11px;color:#b8c4b0;text-decoration:none}.notice{border:1px solid #526b35;background:#192316;color:#d9f7b5;padding:13px 15px;border-radius:11px;font-size:11px;line-height:1.6;margin:23px 0}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:20px 0}.stat,.box{background:linear-gradient(145deg,#171e17,#111511);border:1px solid var(--line);border-radius:14px;padding:18px}.stat small{color:#98a492;font-size:10px}.stat strong{display:block;font-size:25px;margin-top:9px}.content{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box h2{font-size:15px;margin:0 0 16px}.field{display:block;margin:10px 0}.field span{display:block;font-size:10px;color:#aab5a4;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;background:#0b100b;border:1px solid #344034;border-radius:9px;padding:11px;color:white;font:inherit;font-size:12px}.field textarea{min-height:60px;resize:vertical}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{background:var(--green);color:#111;border:0;border-radius:9px;padding:11px 13px;font-weight:900;font-size:11px;cursor:pointer}.btn.secondary{background:#202820;color:#e8eee3;border:1px solid #394539}.btn:disabled{opacity:.5;cursor:wait}.actions{display:flex;gap:8px;flex-wrap:wrap}.list{display:grid;gap:9px}.item{border:1px solid #2b382a;border-radius:11px;padding:12px;background:#0e130e}.itemhead{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.itemhead strong{font-size:12px}.muted{color:#9aa394;font-size:10px;line-height:1.6;margin-top:5px}.tag{font-size:9px;color:var(--green);font-weight:900}.statusrow{display:flex;gap:8px;align-items:center;margin-top:9px;flex-wrap:wrap}.statusrow select{background:#101610;border:1px solid #394539;color:#fff;border-radius:8px;padding:8px;font-size:10px}.msg{display:none;margin:12px 0;padding:11px;border:1px solid #4a6233;border-radius:10px;color:#d6f6b0;font-size:11px;line-height:1.5}.msg.show{display:block}.msg.error{border-color:#713b3b;color:#ffb3b3}.empty{color:#899585;font-size:11px;line-height:1.6}.full{grid-column:1/-1}.hidden{display:none!important}.foot{color:#71806d;font-size:10px;margin-top:24px}@media(max-width:800px){.shell{grid-template-columns:1fr}.side{border-right:0;border-bottom:1px solid var(--line);padding:16px}.brand{margin:0 0 12px}.nav{display:flex;overflow:auto;gap:5px}.nav a{white-space:nowrap}.main{padding:22px 16px}.stats{grid-template-columns:repeat(2,1fr)}.content{grid-template-columns:1fr}.full{grid-column:auto}}@media(max-width:440px){.grid2{grid-template-columns:1fr}}
 </style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script></head>
-<body><div class="shell"><aside class="side"><div class="brand">CARTOON <em>CC</em></div><nav class="nav"><a class="active" href="#resumen">Resumen</a><a href="#productos">Productos</a><a href="#pedidos">Pedidos</a><a href="#inventario">Inventario</a></nav></aside>
+<body><div class="shell"><aside class="side"><div class="brand">CARTOON <em>CC</em></div><nav class="nav"><a class="active" href="#resumen">Resumen</a><a href="#productos">Productos</a><a href="#pedidos">Pedidos</a><a href="#vendedores">Vendedores</a><a href="#inventario">Inventario</a></nav></aside>
 <main class="main"><div class="top" id="resumen"><div><div class="eyebrow">PANEL PRIVADO</div><h1>Administración</h1><div class="muted" id="adminEmail"></div></div><div class="actions"><a class="back" href="index.html">← Ver tienda</a><button class="btn secondary" id="logout">Cerrar sesión</button></div></div>
 <div class="notice"><strong>Operaciones protegidas.</strong> Solo una cuenta con rol admin puede utilizar este panel. Los pagos todavía no están conectados a un proveedor: marca un pedido como pagado únicamente después de verificar el ingreso real fuera de la plataforma. Los códigos nunca se muestran en el catálogo público.</div>
 <div id="globalMsg" class="msg" role="status"></div>
@@ -19,6 +19,7 @@
 <div class="grid2"><label class="field"><span>Nombre del vendedor</span><input id="pSeller" maxlength="100" placeholder="Tienda o vendedor autorizado"></label><label class="field"><span>Disponibilidad</span><select id="pAvailability"><option value="available">Disponible</option><option value="unavailable">No disponible</option><option value="preorder">Preventa</option></select></label></div>
 <button class="btn" id="saveProduct" type="submit">Guardar producto</button></form><div id="productMsg" class="msg"></div></div>
 <div class="box"><h2>Catálogo actual</h2><div class="list" id="productList"><p class="empty">Cargando productos…</p></div></div>
+<div class="box full" id="vendedores"><h2>Solicitudes para convertirse en vendedor</h2><p class="muted">Revisa la información de cada solicitud. Aprobar aquí registra la autorización; no concede permisos para publicar productos hasta activar el panel y sus reglas de seguridad.</p><div class="list" id="sellerApplicationsList"><p class="empty">Cargando solicitudes…</p></div></div>
 <div class="box full" id="pedidos"><h2>Gestión de pedidos</h2><p class="muted">Verifica el pago antes de cambiar un pedido a “Pagado”. Los estados quedan registrados en el pedido.</p><div class="list" id="orderList"><p class="empty">Cargando pedidos…</p></div></div>
 <div class="box full" id="inventario"><h2>Agregar CC al inventario</h2><p class="muted">Los códigos CC se almacenan en el inventario privado. El valor secreto no se devuelve al navegador después de guardarlo.</p><form id="stockForm"><div class="grid2"><label class="field"><span>Producto</span><select id="stockProduct" required></select></label><label class="field"><span>Código CC (secreto)</span><input id="stockCode" type="password" autocomplete="off" required maxlength="300"></label></div><button class="btn" id="stockSave" type="submit">Guardar código</button></form><div id="stockMsg" class="msg"></div><div class="muted" id="stockCount">Inventario: cargando…</div></div>
 </section><div class="foot">© 2026 CARTOON CC · Administración segura</div></main></div>
@@ -52,7 +53,7 @@ async function refresh(){
  $('sales').textContent=money(paid.reduce((s,o)=>s+Number(o.subtotal||0),0),'USD');
  const itemResult=orders.length?await db.from('order_items').select('order_id,product_name,quantity').in('order_id',orders.map(o=>o.id)):{data:[],error:null};
  if(itemResult.error){message('globalMsg',itemResult.error.message,true);return;}
- renderProducts();renderOrders(orders,itemResult.data||[]);await refreshStockCount();
+ renderProducts();renderOrders(orders,itemResult.data||[]);await refreshSellerApplications();await refreshStockCount();
 }
 function renderProducts(){
  const list=$('productList');list.replaceChildren();const sel=$('stockProduct');sel.replaceChildren();
@@ -101,6 +102,36 @@ $('stockForm').addEventListener('submit',async e=>{
  if(error){message('stockMsg',error.message,true);return}
  $('stockCode').value='';message('stockMsg','Código CC guardado en inventario privado.');await refreshStockCount();
 });
+async function refreshSellerApplications(){
+ const host=$('sellerApplicationsList');host.replaceChildren();
+ const {data,error}=await db.from('seller_applications').select('id,user_id,store_name,description,category,contact_email,status,created_at,reviewed_at').order('created_at',{ascending:false});
+ if(error){host.append(node('p','empty','No se pudieron cargar las solicitudes: '+error.message));return}
+ if(!data||!data.length){host.append(node('p','empty','Todavía no hay solicitudes de vendedores.'));return}
+ const labels={digital_goods:'Productos digitales',art_design:'Arte y diseño',software:'Software',collectibles:'Coleccionables',other:'Otros'};
+ data.forEach(app=>{
+  const item=node('div','item'),head=node('div','itemhead');
+  head.append(node('strong',null,app.store_name),node('span','tag',({pending:'PENDIENTE',approved:'APROBADA',rejected:'RECHAZADA'}[app.status]||app.status).toUpperCase()));
+  item.append(head,node('div','muted',(labels[app.category]||app.category)+' · '+new Date(app.created_at).toLocaleString('es-DO')));
+  if(app.description)item.append(node('div','muted',app.description));
+  item.append(node('div','muted','Contacto: '+app.contact_email+' · Cuenta: '+app.user_id.slice(0,8)));
+  if(app.reviewed_at)item.append(node('div','muted','Revisada: '+new Date(app.reviewed_at).toLocaleString('es-DO')));
+  const actions=node('div','actions');
+  ['approved','rejected','pending'].forEach(status=>{
+   const btn=node('button','btn '+(status==='pending'?'secondary':''),status==='approved'?'Aprobar':status==='rejected'?'Rechazar':'Volver a pendiente');btn.type='button';
+   btn.disabled=app.status===status;
+   btn.addEventListener('click',async()=>{
+    if(status==='approved'&&!window.confirm('¿Confirmas que revisaste esta solicitud y deseas aprobar la tienda?'))return;
+    if(status==='rejected'&&!window.confirm('¿Confirmas que deseas rechazar esta solicitud?'))return;
+    btn.disabled=true;
+    const {error:updateError}=await db.from('seller_applications').update({status,reviewed_at:new Date().toISOString()}).eq('id',app.id);
+    if(updateError){message('globalMsg','No se pudo actualizar la solicitud: '+updateError.message,true);btn.disabled=false;return}
+    message('globalMsg','Estado de la solicitud actualizado.');await refreshSellerApplications();
+   });
+   actions.append(btn);
+  });
+  item.append(actions);host.append(item);
+ });
+}
 async function refreshStockCount(){
  const {data,error}=await db.from('gift_cards').select('id,status');
  if(error){$('stockCount').textContent='No se pudo consultar inventario.';return}
