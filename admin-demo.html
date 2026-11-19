@@ -10,14 +10,14 @@
 <section class="stats"><div class="stat"><small>VENTAS PAGADAS / ENTREGADAS</small><strong id="sales">$0</strong></div><div class="stat"><small>PEDIDOS</small><strong id="ordersCount">0</strong></div><div class="stat"><small>CLIENTES</small><strong id="customers">0</strong></div><div class="stat"><small>PRODUCTOS ACTIVOS</small><strong id="productsCount">0</strong></div></section>
 <section class="content">
 <div class="box" id="productos"><h2>Crear producto</h2><form id="productForm">
-<label class="field"><span>Nombre del producto</span><input id="pName" maxlength="100" required placeholder="Gift Card CC $10"></label>
+<label class="field"><span>Nombre del producto</span><input id="pName" maxlength="100" required placeholder="CC $10"></label>
 <label class="field"><span>Descripción</span><textarea id="pDescription" maxlength="500" placeholder="Descripción del producto"></textarea></label>
-<div class="grid2"><label class="field"><span>Valor de la tarjeta</span><input id="pFace" type="number" min="0.01" step="0.01" required></label><label class="field"><span>Precio de venta</span><input id="pPrice" type="number" min="0" step="0.01" required></label></div>
+<div class="grid2"><label class="field"><span>Valor CC</span><input id="pFace" type="number" min="0.01" step="0.01" required></label><label class="field"><span>Precio de venta</span><input id="pPrice" type="number" min="0" step="0.01" required></label></div>
 <div class="grid2"><label class="field"><span>Moneda</span><select id="pCurrency"><option value="USD">USD</option><option value="DOP">DOP</option></select></label><label class="field"><span>URL de imagen (opcional)</span><input id="pImage" type="url" placeholder="https://..."></label></div>
 <button class="btn" id="saveProduct" type="submit">Guardar producto</button></form><div id="productMsg" class="msg"></div></div>
 <div class="box"><h2>Catálogo actual</h2><div class="list" id="productList"><p class="empty">Cargando productos…</p></div></div>
 <div class="box full" id="pedidos"><h2>Gestión de pedidos</h2><p class="muted">Verifica el pago antes de cambiar un pedido a “Pagado”. Los estados quedan registrados en el pedido.</p><div class="list" id="orderList"><p class="empty">Cargando pedidos…</p></div></div>
-<div class="box full" id="inventario"><h2>Agregar tarjetas al inventario</h2><p class="muted">Los códigos se almacenan en la tabla privada de tarjetas. El valor secreto no se devuelve al navegador después de guardarlo.</p><form id="stockForm"><div class="grid2"><label class="field"><span>Producto</span><select id="stockProduct" required></select></label><label class="field"><span>Código de tarjeta (secreto)</span><input id="stockCode" type="password" autocomplete="off" required maxlength="300"></label></div><button class="btn" id="stockSave" type="submit">Guardar código</button></form><div id="stockMsg" class="msg"></div><div class="muted" id="stockCount">Inventario: cargando…</div></div>
+<div class="box full" id="inventario"><h2>Agregar CC al inventario</h2><p class="muted">Los códigos CC se almacenan en el inventario privado. El valor secreto no se devuelve al navegador después de guardarlo.</p><form id="stockForm"><div class="grid2"><label class="field"><span>Producto</span><select id="stockProduct" required></select></label><label class="field"><span>Código CC (secreto)</span><input id="stockCode" type="password" autocomplete="off" required maxlength="300"></label></div><button class="btn" id="stockSave" type="submit">Guardar código</button></form><div id="stockMsg" class="msg"></div><div class="muted" id="stockCount">Inventario: cargando…</div></div>
 </section><div class="foot">© 2026 CARTOON CC · Administración segura</div></main></div>
 <script>
 (function(){
@@ -63,7 +63,7 @@ function renderProducts(){
  if(!sel.options.length)sel.append(node('option',null,'Crea y activa un producto primero'));
 }
 async function toggleProduct(p){const {error}=await db.from('products').update({active:!p.active}).eq('id',p.id);if(error)message('globalMsg',error.message,true);else await refresh()}
-async function editProduct(p){const name=window.prompt('Nombre del producto:',p.name);if(name===null)return;const price=window.prompt('Precio de venta ('+p.currency+'):',String(p.price));if(price===null)return;const face=window.prompt('Valor de la tarjeta ('+p.currency+'):',String(p.face_value));if(face===null)return;const description=window.prompt('Descripción:',p.description||'');if(description===null)return;const payload={name:name.trim(),price:Number(price),face_value:Number(face),description:description.trim()};if(!payload.name||!Number.isFinite(payload.price)||payload.price<0||!Number.isFinite(payload.face_value)||payload.face_value<=0){message('globalMsg','Revisa el nombre, precio y valor de la tarjeta.',true);return;}const {error}=await db.from('products').update(payload).eq('id',p.id);if(error)message('globalMsg',error.message,true);else await refresh()}
+async function editProduct(p){const name=window.prompt('Nombre del producto:',p.name);if(name===null)return;const price=window.prompt('Precio de venta ('+p.currency+'):',String(p.price));if(price===null)return;const face=window.prompt('Valor CC ('+p.currency+'):',String(p.face_value));if(face===null)return;const description=window.prompt('Descripción:',p.description||'');if(description===null)return;const payload={name:name.trim(),price:Number(price),face_value:Number(face),description:description.trim()};if(!payload.name||!Number.isFinite(payload.price)||payload.price<0||!Number.isFinite(payload.face_value)||payload.face_value<=0){message('globalMsg','Revisa el nombre, precio y valor de la tarjeta.',true);return;}const {error}=await db.from('products').update(payload).eq('id',p.id);if(error)message('globalMsg',error.message,true);else await refresh()}
 function renderOrders(orders,items){
  const grouped={};items.forEach(x=>(grouped[x.order_id] ||= []).push(x));
  const list=$('orderList');list.replaceChildren();
@@ -96,7 +96,7 @@ $('stockForm').addEventListener('submit',async e=>{
  const {error}=await db.from('gift_cards').insert({product_id:$('stockProduct').value,code_secret:$('stockCode').value,status:'available'});
  button.disabled=false;
  if(error){message('stockMsg',error.message,true);return}
- $('stockCode').value='';message('stockMsg','Código guardado en inventario privado.');await refreshStockCount();
+ $('stockCode').value='';message('stockMsg','Código CC guardado en inventario privado.');await refreshStockCount();
 });
 async function refreshStockCount(){
  const {data,error}=await db.from('gift_cards').select('id,status');
