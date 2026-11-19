@@ -50,7 +50,7 @@ html.auth-check body{visibility:hidden}
 <body>
 <header><div class="wrap nav">
 <a class="brand" href="#"><div class="brandmark" aria-label="Logo oficial CARTOON CC"><img src="https://i.ibb.co/Jj7PYxk6/80674-FC5-F9-A1-4668-8-EA0-1979350-DCA48.png" alt="Logo oficial CARTOON CC"></div><span>CARTOON <em>CC</em></span></a>
-<nav class="links"><a href="#catalogo">Tarjetas</a><a href="#ventajas">Cómo funciona</a><a href="#ayuda">Ayuda</a></nav>
+<nav class="links"><a href="#catalogo">CC</a><a href="#ventajas">Cómo funciona</a><a href="#ayuda">Ayuda</a></nav>
 <div class="actions"><a class="btn" href="cuenta.html">Iniciar sesión</a><button class="btn primary" onclick="checkoutCart()">Carrito <span class="cart-count" id="count">0</span></button></div>
 </div></header>
 <main>
@@ -105,7 +105,7 @@ function renderProducts(){
 function applyCurrentFilter(){
  const min=Number(document.getElementById('minPrice').value),max=Number(document.getElementById('maxPrice').value);
  let shown=0;document.querySelectorAll('.product[data-price]').forEach(card=>{const visible=Number(card.dataset.price)>=min&&Number(card.dataset.price)<=max;card.hidden=!visible;if(visible)shown++;});
- document.getElementById('filterStatus').textContent=shown?'Se encontraron '+shown+' tarjeta(s) en el rango seleccionado.':'No hay tarjetas en ese rango de precios.';
+ document.getElementById('filterStatus').textContent=shown?'Se encontraron '+shown+' CC(s) en el rango seleccionado.':'No hay productos CC en ese rango de precios.';
 }
 function applyPriceFilter(event){event.preventDefault();const min=Number(document.getElementById('minPrice').value),max=Number(document.getElementById('maxPrice').value);if(!Number.isFinite(min)||!Number.isFinite(max)||min<0||max<min){document.getElementById('filterStatus').textContent='Revisa el rango de precios.';return;}applyCurrentFilter();}
 async function loadCatalog(){
