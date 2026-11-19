@@ -1,12 +1,105 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b0d0b"><title>Administración — CARTOON CC</title>
 <style>
-:root{--bg:#0b0d0b;--panel:#141914;--line:#293329;--green:#b7ff45;--muted:#9aa394;--white:#f4f7ef}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,system-ui,Arial}.shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh}.side{background:#101510;border-right:1px solid #283128;padding:25px 17px}.brand{font-size:19px;font-weight:950;margin:0 0 38px}.brand em{font-style:normal;color:var(--green)}.nav a{display:block;padding:12px;border-radius:9px;color:#aab5a4;font-size:12px;margin:5px 0}.nav a.active{background:#202b1b;color:var(--green)}.main{padding:32px;max-width:1200px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.eyebrow{font-size:10px;color:var(--green);font-weight:900;letter-spacing:2px}.top h1{font-size:29px;letter-spacing:-1px;margin:8px 0}.back{font-size:11px;color:#b8c4b0;text-decoration:none}.notice{border:1px solid #526b35;background:#192316;color:#d9f7b5;padding:13px 15px;border-radius:11px;font-size:11px;line-height:1.6;margin:23px 0}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:20px 0}.stat,.box{background:linear-gradient(145deg,#171e17,#111511);border:1px solid var(--line);border-radius:14px;padding:18px}.stat small{color:#98a492;font-size:10px}.stat strong{display:block;font-size:25px;margin-top:9px}.stat em{font-size:10px;color:#8b9785;font-style:normal}.content{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.box h2{font-size:15px;margin:0 0 16px}.rowitem{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-top:1px solid #293229;font-size:11px}.status{color:var(--green)}.empty{color:#899585;font-size:11px;line-height:1.6}.btn{background:var(--green);color:#111;border:0;border-radius:9px;padding:11px 13px;font-weight:900;font-size:11px;cursor:pointer}.btn.secondary{background:#202820;color:#e8eee3;border:1px solid #394539}.actions{display:flex;gap:8px;flex-wrap:wrap}.field{width:100%;background:#0b100b;border:1px solid #344034;border-radius:9px;padding:11px;color:white;margin:7px 0 12px}.label{font-size:10px;color:#aab5a4}.foot{color:#71806d;font-size:10px;margin-top:24px}@media(max-width:800px){.shell{grid-template-columns:1fr}.side{border-right:0;border-bottom:1px solid var(--line);padding:16px}.brand{margin:0 0 12px}.nav{display:flex;overflow:auto;gap:5px}.nav a{white-space:nowrap}.main{padding:22px 16px}.stats{grid-template-columns:repeat(2,1fr)}.content{grid-template-columns:1fr}} 
-</style></head><body><div class="shell"><aside class="side"><div class="brand">CARTOON <em>CC</em></div><nav class="nav"><a class="active" href="#">Resumen</a><a href="#productos">Productos</a><a href="#pedidos">Pedidos</a><a href="#clientes">Clientes</a><a href="#ajustes">Ajustes</a></nav></aside>
-<main class="main"><div class="top"><div><div class="eyebrow">PANEL DE CONTROL</div><h1>Administración</h1></div><a class="back" href="index.html">← Ver tienda</a></div>
-<div class="notice"><strong>Modo demostración.</strong> Los datos son ficticios y los controles no modifican pedidos ni productos reales. Antes de activar este panel hay que implementar acceso privado, permisos y almacenamiento seguro en el servidor.</div>
-<section class="stats"><div class="stat"><small>VENTAS</small><strong>$0.00</strong><em>Datos de ejemplo</em></div><div class="stat"><small>PEDIDOS</small><strong>0</strong><em>Sin pedidos reales</em></div><div class="stat"><small>CLIENTES</small><strong>0</strong><em>Sin cuentas activas</em></div><div class="stat"><small>PRODUCTOS</small><strong>4</strong><em>Tarjetas de muestra</em></div></section>
-<section class="content"><div class="box" id="productos"><h2>Productos del catálogo</h2><div class="rowitem"><span>Tarjeta CC — $10</span><span class="status">Demo</span></div><div class="rowitem"><span>Tarjeta CC — $25</span><span class="status">Demo</span></div><div class="rowitem"><span>Tarjeta CC — $50</span><span class="status">Demo</span></div><div class="rowitem"><span>Tarjeta CC — $100</span><span class="status">Demo</span></div><div class="actions"><button class="btn" onclick="demo()">+ Agregar producto</button><button class="btn secondary" onclick="demo()">Editar catálogo</button></div></div>
-<div class="box" id="pedidos"><h2>Actividad reciente</h2><p class="empty">Todavía no hay pedidos. Cuando conectemos la tienda a un backend seguro, aquí aparecerán los pedidos y sus estados.</p><div class="rowitem"><span>Última actividad</span><span>—</span></div></div>
-<div class="box" id="clientes"><h2>Clientes</h2><p class="empty">La lista de clientes estará disponible después de activar el registro seguro y el sistema de cuentas.</p><button class="btn secondary" onclick="demo()">Ver clientes</button></div>
-<div class="box" id="ajustes"><h2>Configuración de tienda</h2><label class="label">Nombre de la tienda</label><input class="field" value="CARTOON CC" readonly><label class="label">Estado de pagos</label><input class="field" value="Desactivados en la demo" readonly><p class="empty">La configuración de pagos se añadirá al final, después de validar el flujo de pedidos.</p></div></section><div class="foot">© 2026 CARTOON CC · Panel visual de demostración</div></main></div><script>function demo(){alert('Esta función se activará cuando conectemos el panel a un servidor seguro.')}</script></body></html>
+:root{--bg:#0b0d0b;--panel:#141914;--line:#293329;--green:#b7ff45;--muted:#9aa394;--white:#f4f7ef}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,system-ui,Arial}.shell{display:grid;grid-template-columns:220px 1fr;min-height:100vh}.side{background:#101510;border-right:1px solid #283128;padding:25px 17px}.brand{font-size:19px;font-weight:950;margin:0 0 38px}.brand em{font-style:normal;color:var(--green)}.nav a{display:block;padding:12px;border-radius:9px;color:#aab5a4;font-size:12px;margin:5px 0;text-decoration:none}.nav a.active{background:#202b1b;color:var(--green)}.main{padding:32px;max-width:1300px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.eyebrow{font-size:10px;color:var(--green);font-weight:900;letter-spacing:2px}.top h1{font-size:29px;letter-spacing:-1px;margin:8px 0}.back{font-size:11px;color:#b8c4b0;text-decoration:none}.notice{border:1px solid #526b35;background:#192316;color:#d9f7b5;padding:13px 15px;border-radius:11px;font-size:11px;line-height:1.6;margin:23px 0}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:20px 0}.stat,.box{background:linear-gradient(145deg,#171e17,#111511);border:1px solid var(--line);border-radius:14px;padding:18px}.stat small{color:#98a492;font-size:10px}.stat strong{display:block;font-size:25px;margin-top:9px}.content{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box h2{font-size:15px;margin:0 0 16px}.field{display:block;margin:10px 0}.field span{display:block;font-size:10px;color:#aab5a4;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;background:#0b100b;border:1px solid #344034;border-radius:9px;padding:11px;color:white;font:inherit;font-size:12px}.field textarea{min-height:60px;resize:vertical}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{background:var(--green);color:#111;border:0;border-radius:9px;padding:11px 13px;font-weight:900;font-size:11px;cursor:pointer}.btn.secondary{background:#202820;color:#e8eee3;border:1px solid #394539}.btn:disabled{opacity:.5;cursor:wait}.actions{display:flex;gap:8px;flex-wrap:wrap}.list{display:grid;gap:9px}.item{border:1px solid #2b382a;border-radius:11px;padding:12px;background:#0e130e}.itemhead{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.itemhead strong{font-size:12px}.muted{color:#9aa394;font-size:10px;line-height:1.6;margin-top:5px}.tag{font-size:9px;color:var(--green);font-weight:900}.statusrow{display:flex;gap:8px;align-items:center;margin-top:9px;flex-wrap:wrap}.statusrow select{background:#101610;border:1px solid #394539;color:#fff;border-radius:8px;padding:8px;font-size:10px}.msg{display:none;margin:12px 0;padding:11px;border:1px solid #4a6233;border-radius:10px;color:#d6f6b0;font-size:11px;line-height:1.5}.msg.show{display:block}.msg.error{border-color:#713b3b;color:#ffb3b3}.empty{color:#899585;font-size:11px;line-height:1.6}.full{grid-column:1/-1}.hidden{display:none!important}.foot{color:#71806d;font-size:10px;margin-top:24px}@media(max-width:800px){.shell{grid-template-columns:1fr}.side{border-right:0;border-bottom:1px solid var(--line);padding:16px}.brand{margin:0 0 12px}.nav{display:flex;overflow:auto;gap:5px}.nav a{white-space:nowrap}.main{padding:22px 16px}.stats{grid-template-columns:repeat(2,1fr)}.content{grid-template-columns:1fr}.full{grid-column:auto}}@media(max-width:440px){.grid2{grid-template-columns:1fr}}
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script></head>
+<body><div class="shell"><aside class="side"><div class="brand">CARTOON <em>CC</em></div><nav class="nav"><a class="active" href="#resumen">Resumen</a><a href="#productos">Productos</a><a href="#pedidos">Pedidos</a><a href="#inventario">Inventario</a></nav></aside>
+<main class="main"><div class="top" id="resumen"><div><div class="eyebrow">PANEL PRIVADO</div><h1>Administración</h1><div class="muted" id="adminEmail"></div></div><div class="actions"><a class="back" href="index.html">← Ver tienda</a><button class="btn secondary" id="logout">Cerrar sesión</button></div></div>
+<div class="notice"><strong>Operaciones protegidas.</strong> Solo una cuenta con rol admin puede utilizar este panel. Los pagos todavía no están conectados a un proveedor: marca un pedido como pagado únicamente después de verificar el ingreso real fuera de la plataforma. Los códigos nunca se muestran en el catálogo público.</div>
+<div id="globalMsg" class="msg" role="status"></div>
+<section class="stats"><div class="stat"><small>VENTAS PAGADAS / ENTREGADAS</small><strong id="sales">$0</strong></div><div class="stat"><small>PEDIDOS</small><strong id="ordersCount">0</strong></div><div class="stat"><small>CLIENTES</small><strong id="customers">0</strong></div><div class="stat"><small>PRODUCTOS ACTIVOS</small><strong id="productsCount">0</strong></div></section>
+<section class="content">
+<div class="box" id="productos"><h2>Crear producto</h2><form id="productForm">
+<label class="field"><span>Nombre del producto</span><input id="pName" maxlength="100" required placeholder="Gift Card CC $10"></label>
+<label class="field"><span>Descripción</span><textarea id="pDescription" maxlength="500" placeholder="Descripción del producto"></textarea></label>
+<div class="grid2"><label class="field"><span>Valor de la tarjeta</span><input id="pFace" type="number" min="0.01" step="0.01" required></label><label class="field"><span>Precio de venta</span><input id="pPrice" type="number" min="0" step="0.01" required></label></div>
+<div class="grid2"><label class="field"><span>Moneda</span><select id="pCurrency"><option value="USD">USD</option><option value="DOP">DOP</option></select></label><label class="field"><span>URL de imagen (opcional)</span><input id="pImage" type="url" placeholder="https://..."></label></div>
+<button class="btn" id="saveProduct" type="submit">Guardar producto</button></form><div id="productMsg" class="msg"></div></div>
+<div class="box"><h2>Catálogo actual</h2><div class="list" id="productList"><p class="empty">Cargando productos…</p></div></div>
+<div class="box full" id="pedidos"><h2>Gestión de pedidos</h2><p class="muted">Verifica el pago antes de cambiar un pedido a “Pagado”. Los estados quedan registrados en el pedido.</p><div class="list" id="orderList"><p class="empty">Cargando pedidos…</p></div></div>
+<div class="box full" id="inventario"><h2>Agregar tarjetas al inventario</h2><p class="muted">Los códigos se almacenan en la tabla privada de tarjetas. El valor secreto no se devuelve al navegador después de guardarlo.</p><form id="stockForm"><div class="grid2"><label class="field"><span>Producto</span><select id="stockProduct" required></select></label><label class="field"><span>Código de tarjeta (secreto)</span><input id="stockCode" type="password" autocomplete="off" required maxlength="300"></label></div><button class="btn" id="stockSave" type="submit">Guardar código</button></form><div id="stockMsg" class="msg"></div><div class="muted" id="stockCount">Inventario: cargando…</div></div>
+</section><div class="foot">© 2026 CARTOON CC · Administración segura</div></main></div>
+<script>
+(function(){
+const URL='https://hfovblodnovuettvvifp.supabase.co',KEY='sb_publishable_Bqoj43-2y7bJp9bZms_O9g_roGOk2_3';
+const db=window.supabase.createClient(URL,KEY),$=id=>document.getElementById(id);
+const money=(v,c='USD')=>new Intl.NumberFormat('es-DO',{style:'currency',currency:c}).format(Number(v||0));
+function message(id,text,error=false){const e=$(id);e.textContent=text;e.classList.add('show');e.classList.toggle('error',error)}
+function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
+let products=[];
+async function guard(){
+ const {data:{user},error}=await db.auth.getUser();
+ if(error||!user){location.replace('cuenta.html');return false}
+ $('adminEmail').textContent=user.email||'';
+ const {data:profile,error:pError}=await db.from('profiles').select('role').eq('id',user.id).single();
+ if(pError||profile?.role!=='admin'){document.querySelector('.main').replaceChildren(node('h1','', 'Acceso denegado'),node('p','muted','Esta cuenta no tiene permisos de administrador. Solicita al propietario que asigne el rol admin en Supabase.'));return false}
+ return true;
+}
+async function refresh(){
+ const [pr,or,cr]=await Promise.all([
+  db.from('products').select('id,name,description,face_value,price,currency,active').order('created_at',{ascending:false}),
+  db.from('orders').select('id,user_id,status,subtotal,currency,created_at').order('created_at',{ascending:false}).limit(100),
+  db.from('profiles').select('id',{count:'exact',head:true})
+ ]);
+ if(pr.error||or.error||cr.error){message('globalMsg',(pr.error||or.error||cr.error).message,true);return}
+ products=pr.data||[];const orders=or.data||[];
+ $('ordersCount').textContent=orders.length;$('customers').textContent=cr.count||0;
+ $('productsCount').textContent=products.filter(p=>p.active).length;
+ const paid=orders.filter(o=>['paid','fulfilled'].includes(o.status));
+ $('sales').textContent=money(paid.reduce((s,o)=>s+Number(o.subtotal||0),0),'USD');
+ renderProducts();renderOrders(orders);await refreshStockCount();
+}
+function renderProducts(){
+ const list=$('productList');list.replaceChildren();const sel=$('stockProduct');sel.replaceChildren();
+ if(!products.length)list.append(node('p','empty','No hay productos creados todavía.'));
+ products.forEach(p=>{
+  const item=node('div','item'),head=node('div','itemhead'),name=node('strong',null,p.name),tag=node('span','tag',p.active?'ACTIVO':'INACTIVO');
+  head.append(name,tag);item.append(head,node('div','muted',money(p.price,p.currency)+' · Valor '+money(p.face_value,p.currency)));
+  const actions=node('div','actions');const toggle=node('button','btn secondary',p.active?'Desactivar':'Activar');toggle.type='button';toggle.addEventListener('click',()=>toggleProduct(p));actions.append(toggle);item.append(actions);list.append(item);
+  if(p.active){const opt=node('option',null,p.name+' — '+money(p.face_value,p.currency));opt.value=p.id;sel.append(opt)}
+ });
+ if(!sel.options.length)sel.append(node('option',null,'Crea y activa un producto primero'));
+}
+async function toggleProduct(p){const {error}=await db.from('products').update({active:!p.active}).eq('id',p.id);if(error)message('globalMsg',error.message,true);else await refresh()}
+function renderOrders(orders){
+ const list=$('orderList');list.replaceChildren();
+ if(!orders.length){list.append(node('p','empty','Todavía no hay pedidos.'));return}
+ const labels={pending:'Pendiente',paid:'Pagado',fulfilled:'Entregado',cancelled:'Cancelado',refunded:'Reembolsado'};
+ orders.forEach(o=>{
+  const item=node('div','item'),head=node('div','itemhead');head.append(node('strong',null,'Pedido #'+o.id.slice(0,8).toUpperCase()),node('span','tag',labels[o.status]||o.status));
+  item.append(head,node('div','muted',new Date(o.created_at).toLocaleString('es-DO')+' · '+money(o.subtotal,o.currency)+' · Cliente '+o.user_id.slice(0,8)));
+  const row=node('div','statusrow'),select=document.createElement('select');
+  ['pending','paid','fulfilled','cancelled','refunded'].forEach(s=>{const opt=node('option',null,labels[s]);opt.value=s;opt.selected=s===o.status;select.append(opt)});
+  const save=node('button','btn secondary','Actualizar estado');save.type='button';save.addEventListener('click',async()=>{
+   if(select.value==='paid'&&!window.confirm('Confirma que verificaste el ingreso del dinero en tu banco/proveedor. ¿Marcar como pagado?'))return;
+   if(select.value==='fulfilled'&&o.status!=='paid'&&!window.confirm('Este pedido no figura pagado. ¿Confirmas que deseas marcarlo como entregado?'))return;
+   save.disabled=true;const {error}=await db.from('orders').update({status:select.value}).eq('id',o.id);
+   if(error)message('globalMsg',error.message,true);else await refresh();save.disabled=false;
+  });
+  row.append(select,save);item.append(row);list.append(item);
+ });
+}
+$('productForm').addEventListener('submit',async e=>{
+ e.preventDefault();const button=$('saveProduct');button.disabled=true;
+ const payload={name:$('pName').value.trim(),description:$('pDescription').value.trim(),face_value:Number($('pFace').value),price:Number($('pPrice').value),currency:$('pCurrency').value,image_url:$('pImage').value.trim()||null,active:true};
+ const {error}=await db.from('products').insert(payload);button.disabled=false;
+ if(error){message('productMsg',error.message,true);return}
+ $('productForm').reset();message('productMsg','Producto guardado correctamente.');await refresh();
+});
+$('stockForm').addEventListener('submit',async e=>{
+ e.preventDefault();const button=$('stockSave');button.disabled=true;
+ const {error}=await db.from('gift_cards').insert({product_id:$('stockProduct').value,code_secret:$('stockCode').value,status:'available'});
+ button.disabled=false;
+ if(error){message('stockMsg',error.message,true);return}
+ $('stockCode').value='';message('stockMsg','Código guardado en inventario privado.');await refreshStockCount();
+});
+async function refreshStockCount(){
+ const {data,error}=await db.from('gift_cards').select('id,status');
+ if(error){$('stockCount').textContent='No se pudo consultar inventario.';return}
+ const counts={};(data||[]).forEach(x=>counts[x.status]=(counts[x.status]||0)+1);
+ $('stockCount').textContent='Disponibles: '+(counts.available||0)+' · Reservadas: '+(counts.reserved||0)+' · Vendidas: '+(counts.sold||0)+' · Deshabilitadas: '+(counts.disabled||0);
+}
+$('logout').addEventListener('click',async()=>{await db.auth.signOut();location.replace('cuenta.html')});
+guard().then(ok=>{if(ok)refresh()});
+})();
+</script></body></html>
