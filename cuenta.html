@@ -81,7 +81,14 @@
     <strong>🔎 Smart Filter</strong><p style="font-size:12px;color:#66869a">Usa uno o varios filtros para encontrar productos CC.</p>
     <div class="cc-filter-grid">
       <label>Nombre del producto<input id="cardsSearch" type="search" placeholder="Buscar por nombre o descripción"></label>
-      <label>Moneda<select id="cardsCurrency"><option value="">Todas</option><option value="USD">USD</option><option value="DOP">DOP</option></select></label>
+      <label>Country<select id="cardsCountry"><option value="">Todos los países</option></select></label>
+      <label>Category<select id="cardsCategory"><option value="">Todas las categorías</option></select></label>
+      <label>Brand<select id="cardsBrand"><option value="">Todas las marcas</option></select></label>
+      <label>Product Type<select id="cardsType"><option value="">Todos los tipos</option></select></label>
+      <label>Seller<select id="cardsSeller"><option value="">Todos los vendedores</option></select></label>
+      <label>Status<select id="cardsStatus"><option value="">Todos</option><option value="available">Disponible</option><option value="unavailable">No disponible</option><option value="preorder">Preventa</option></select></label>
+      <label>Availability<select id="cardsAvailability"><option value="">Todas</option><option value="available">Disponible</option><option value="unavailable">No disponible</option><option value="preorder">Preventa</option></select></label>
+      <label>Currency<select id="cardsCurrency"><option value="">Todas</option><option value="USD">USD</option><option value="DOP">DOP</option></select></label>
       <label>Precio mínimo<input id="cardsMin" type="number" min="0" step="0.01" placeholder="Mínimo"></label>
       <label>Precio máximo<input id="cardsMax" type="number" min="0" step="0.01" placeholder="Máximo"></label>
       <label>Ordenar por<select id="cardsSort"><option value="default">Recomendados</option><option value="low">Precio: menor a mayor</option><option value="high">Precio: mayor a menor</option><option value="name">Nombre A–Z</option></select></label>
@@ -335,26 +342,32 @@
   document.addEventListener('click',e=>{if(!e.target.closest('.user-menu-wrap'))$('userMenu').classList.add('hidden')});
   $('menuLogout').addEventListener('click',()=>$('logoutButton').click());
   async function ccLoadProducts(){
-    const host=$('clientProducts');host.replaceChildren();const {data,error}=await client.from('products').select('id,name,description,face_value,price,currency').eq('active',true).order('price');
+    const host=$('clientProducts');host.replaceChildren();const {data,error}=await client.from('products').select('id,name,description,face_value,price,currency,country,category,brand,product_type,seller_name,availability').eq('active',true).order('price');
     if(error){host.textContent='No se pudo cargar el catálogo.';return}ccProducts=data||[];if($('cardsProductList'))ccRenderCards();
     if(!ccProducts.length){const empty=document.createElement('div');empty.className='cc-empty';empty.textContent='No hay productos CC disponibles todavía.';host.append(empty);return}
     ccProducts.forEach(p=>{const card=document.createElement('article');card.className='cc-product';const title=document.createElement('strong');title.textContent=p.name;const desc=document.createElement('small');desc.textContent=(p.description||'Producto CC')+' · Valor '+ccMoney(p.face_value,p.currency);const price=document.createElement('strong');price.textContent=ccMoney(p.price,p.currency);const add=document.createElement('button');add.type='button';add.textContent='Agregar al carrito';add.addEventListener('click',()=>{const found=ccCart.find(x=>x.id===p.id);if(found)found.quantity++;else ccCart.push({id:p.id,name:p.name,price:Number(p.price),currency:p.currency,quantity:1});$('clientCartCount').textContent=ccCart.reduce((n,x)=>n+x.quantity,0);add.textContent='Agregado ✓';window.setTimeout(()=>add.textContent='Agregar al carrito',900)});card.append(title,desc,price,add);host.append(card)});
   }
 
+  function ccFillCardOptions(id,key,placeholder){
+    const el=$(id),selected=el.value,values=[...new Set(ccProducts.map(p=>(p[key]||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+    el.replaceChildren(new Option(placeholder,''),...values.map(v=>new Option(v,v)));if(values.includes(selected))el.value=selected;
+  }
   function ccRenderCards(){
+    ['cardsCountry','cardsCategory','cardsBrand','cardsType','cardsSeller'].forEach((id,i)=>ccFillCardOptions(id,['country','category','brand','product_type','seller_name'][i],['Todos los países','Todas las categorías','Todas las marcas','Todos los tipos','Todos los vendedores'][i]));
     const host=$('cardsProductList');if(!host)return;host.replaceChildren();
     const term=$('cardsSearch').value.trim().toLowerCase(),currency=$('cardsCurrency').value;
     const min=$('cardsMin').value===''?null:Number($('cardsMin').value),max=$('cardsMax').value===''?null:Number($('cardsMax').value);
-    let rows=ccProducts.filter(p=>(!term||(p.name+' '+(p.description||'')).toLowerCase().includes(term))&&(!currency||p.currency===currency)&&(min===null||Number(p.price)>=min)&&(max===null||Number(p.price)<=max));
+    const filters=[['cardsCountry','country'],['cardsCategory','category'],['cardsBrand','brand'],['cardsType','product_type'],['cardsSeller','seller_name'],['cardsAvailability','availability'],['cardsStatus','availability']];
+    let rows=ccProducts.filter(p=>(!term||(p.name+' '+(p.description||'')).toLowerCase().includes(term))&&(!currency||p.currency===currency)&&(min===null||Number(p.price)>=min)&&(max===null||Number(p.price)<=max)&&filters.every(([id,key])=>!$(id).value||p[key]===$(id).value));
     const sort=$('cardsSort').value;if(sort==='low')rows.sort((a,b)=>Number(a.price)-Number(b.price));if(sort==='high')rows.sort((a,b)=>Number(b.price)-Number(a.price));if(sort==='name')rows.sort((a,b)=>a.name.localeCompare(b.name));
     $('cardsTotalLabel').textContent='TOTAL PRODUCTS '+rows.length;
     if(!rows.length){const empty=document.createElement('div');empty.className='cc-empty';empty.textContent=ccProducts.length?'No hay productos que coincidan con esos filtros.':'Todavía no hay productos CC publicados.';host.append(empty);return}
-    rows.forEach(p=>{const card=document.createElement('article');card.className='cc-product';const title=document.createElement('strong');title.textContent=p.name;const desc=document.createElement('small');desc.textContent=(p.description||'Producto CC')+' · '+ccMoney(p.face_value,p.currency);const price=document.createElement('strong');price.textContent=ccMoney(p.price,p.currency);const add=document.createElement('button');add.type='button';add.textContent='Agregar al carrito';add.addEventListener('click',()=>{const found=ccCart.find(x=>x.id===p.id);if(found)found.quantity++;else ccCart.push({id:p.id,name:p.name,price:Number(p.price),currency:p.currency,quantity:1});$('clientCartCount').textContent=ccCart.reduce((n,x)=>n+x.quantity,0);add.textContent='Agregado ✓';window.setTimeout(()=>add.textContent='Agregar al carrito',900)});card.append(title,desc,price,add);host.append(card)});
+    rows.forEach(p=>{const card=document.createElement('article');card.className='cc-product';const title=document.createElement('strong');title.textContent=p.name;const meta=document.createElement('small');meta.textContent=[p.category,p.brand,p.country,p.seller_name].filter(Boolean).join(' · ')||'Producto CC';const desc=document.createElement('small');desc.textContent=(p.description||'Producto CC')+' · '+ccMoney(p.face_value,p.currency);const price=document.createElement('strong');price.textContent=ccMoney(p.price,p.currency);const add=document.createElement('button');add.type='button';add.textContent='Agregar al carrito';add.disabled=p.availability==='unavailable';add.addEventListener('click',()=>{const found=ccCart.find(x=>x.id===p.id);if(found)found.quantity++;else ccCart.push({id:p.id,name:p.name,price:Number(p.price),currency:p.currency,quantity:1});$('clientCartCount').textContent=ccCart.reduce((n,x)=>n+x.quantity,0);add.textContent='Agregado ✓';window.setTimeout(()=>add.textContent='Agregar al carrito',900)});card.append(title,meta,desc,price,add);host.append(card)});
   }
   $('cardsSearchButton').addEventListener('click',ccRenderCards);
-  ['cardsSearch','cardsCurrency','cardsMin','cardsMax','cardsSort'].forEach(id=>$(id).addEventListener('change',ccRenderCards));
+  ['cardsSearch','cardsCountry','cardsCategory','cardsBrand','cardsType','cardsSeller','cardsStatus','cardsAvailability','cardsCurrency','cardsMin','cardsMax','cardsSort'].forEach(id=>$(id).addEventListener('change',ccRenderCards));
   $('cardsSearch').addEventListener('keydown',e=>{if(e.key==='Enter')ccRenderCards()});
-  $('cardsResetButton').addEventListener('click',()=>{$('cardsSearch').value='';$('cardsCurrency').value='';$('cardsMin').value='';$('cardsMax').value='';$('cardsSort').value='default';ccRenderCards()});
+  $('cardsResetButton').addEventListener('click',()=>{$('cardsSearch').value='';['cardsCountry','cardsCategory','cardsBrand','cardsType','cardsSeller','cardsStatus','cardsAvailability'].forEach(id=>$(id).value='');$('cardsCurrency').value='';$('cardsMin').value='';$('cardsMax').value='';$('cardsSort').value='default';ccRenderCards()});
   $('toggleCardsFilter').addEventListener('click',()=>{const panel=$('cardsFilterPanel');const hidden=panel.hidden=!panel.hidden;$('toggleCardsFilter').textContent=hidden?'🔼 Show Filter':'🔽 Hide Filter'});
 
   function ccRenderCart(){
