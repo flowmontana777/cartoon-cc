@@ -86,7 +86,7 @@
 <button type="button" class="menu-link" data-page="account">🪪 Account</button><button type="button" class="menu-link" data-page="balance">💎 Add Balance</button><button type="button" class="menu-link" data-page="mycc">🪙 My CC</button><button type="button" class="menu-link" data-page="referral">📡 Referral</button><button type="button" class="menu-link" data-page="seller">🏪 Convertirse en vendedor</button><button type="button" class="menu-link logout-menu" id="menuLogout">🚪 Logout</button></div></div></nav>
 <div id="clientPages">
 <section class="dash-box client-page active" data-panel="news"><h3>📰 News</h3><p class="page-intro">Novedades y avisos de CARTOON CC.</p><div class="cc-empty">Bienvenido a CC. Aquí aparecerán los anuncios y novedades oficiales de la plataforma.</div></section>
-<section class="dash-box client-page" data-panel="bases"><h3>🪸 List Bases</h3><p class="page-intro">Explora las listas disponibles en CC.</p><div class="cc-empty">Todavía no hay listas publicadas. Cuando haya contenido disponible aparecerá aquí.</div><div class="cc-demo-person" id="basesDemoForm"><div class="cc-demo-label">DATOS FICTICIOS · SOLO DEMOSTRACIÓN</div><h4>Formulario de ejemplo</h4><p>Estos valores son inventados, están deshabilitados y no se guardan ni se envían.</p><div class="cc-demo-grid"><label>Nombre<input disabled value="Persona Demo"></label><label>SSN<input disabled value="XXX-XX-XXXX"></label><label>Fecha de nacimiento<input disabled value="MM/DD/AAAA"></label><label>Teléfono<input disabled value="000-000-0000"></label><label>IP<input disabled value="0.0.0.0"></label><label>Dirección<input disabled value="Dirección ficticia"></label></div></div></section>
+<section class="dash-box client-page" data-panel="bases"><h3>🪸 List Bases</h3><p class="page-intro">Explora las listas disponibles en CC.</p><div class="cc-empty">Todavía no hay listas publicadas. Cuando haya contenido disponible aparecerá aquí.</div></section>
 
 <section class="dash-box client-page" data-panel="cards">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
@@ -117,7 +117,7 @@
   <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0;color:#cceeff;font-size:12px"><span id="cardsPageLabel">PAGE 1</span><span id="cardsTotalLabel">TOTAL PRODUCTS 0</span></div>
   <div id="cardsProductList" class="cc-product-grid"><div class="cc-empty">Cargando catálogo…</div></div>
 </section>
-<section class="dash-box client-page" data-panel="buy"><h3>🪙 Buy CC</h3><p class="page-intro">Selecciona un producto del catálogo para agregarlo al carrito.</p><div id="clientProducts" class="cc-product-grid"><div class="cc-empty">Cargando catálogo…</div></div><div class="cc-demo-person" id="buyDemoForm"><div class="cc-demo-label">DATOS FICTICIOS · SOLO DEMOSTRACIÓN</div><h4>Formulario de ejemplo</h4><p>Estos valores son inventados, están deshabilitados y no se guardan ni se envían.</p><div class="cc-demo-grid"><label>Nombre<input disabled value="Persona Demo"></label><label>SSN<input disabled value="XXX-XX-XXXX"></label><label>Fecha de nacimiento<input disabled value="MM/DD/AAAA"></label><label>Teléfono<input disabled value="000-000-0000"></label><label>IP<input disabled value="0.0.0.0"></label><label>Dirección<input disabled value="Dirección ficticia"></label></div></div></section>
+<section class="dash-box client-page" data-panel="buy"><h3>🪙 Buy CC</h3><p class="page-intro">Selecciona un producto del catálogo para agregarlo al carrito.</p><div id="clientProducts" class="cc-product-grid"><div class="cc-empty">Cargando catálogo…</div></div></section>
 <section class="dash-box client-page" data-panel="balance"><h3>💎 Add Balance</h3><p class="page-intro">Consulta cómo añadir saldo a tu cuenta CC.</p><div class="cc-empty">La recarga de saldo aún no está habilitada. Próximamente se publicarán los métodos de pago oficiales. No envíes dinero a cuentas no verificadas.</div></section>
 <section class="dash-box client-page" data-panel="cart"><h3>🛒 Cart</h3><p class="page-intro">Revisa tus artículos antes de crear el pedido.</p><div id="clientCartItems"></div><div id="clientCartTotal" class="order-meta"></div><button type="button" class="cc-action" id="clientCheckout">Confirmar pedido</button><div class="dash-notice" id="cartNotice"></div></section>
 <section class="dash-box client-page" data-panel="mycc"><h3>🪙 My CC</h3><p class="page-intro">Consulta tus pedidos y el estado de tus compras CC.</p><div id="myCcOrders" class="order-list"><div class="cc-empty">Cargando tus compras…</div></div></section>
@@ -368,6 +368,18 @@
   });
 
 
+  function ccAppendDemoForm(card){
+    const demo=document.createElement('div');demo.className='cc-demo-person';
+    const label=document.createElement('div');label.className='cc-demo-label';label.textContent='DATOS FICTICIOS · SOLO DEMOSTRACIÓN';
+    const heading=document.createElement('h4');heading.textContent='Formulario de ejemplo';
+    const note=document.createElement('p');note.textContent='Datos inventados, deshabilitados y solo ilustrativos. No se recopilan, guardan ni envían.';
+    const grid=document.createElement('div');grid.className='cc-demo-grid';
+    [['Nombre','Persona Demo'],['SSN','XXX-XX-XXXX'],['Fecha de nacimiento','MM/DD/AAAA'],['Teléfono','000-000-0000'],['IP','0.0.0.0'],['Dirección','Dirección ficticia']].forEach(([name,value])=>{
+      const field=document.createElement('label');field.textContent=name;
+      const input=document.createElement('input');input.disabled=true;input.value=value;field.append(input);grid.append(field);
+    });
+    demo.append(label,heading,note,grid);card.append(demo);
+  }
   const ccCart=[];let ccProducts=[];
   function ccMoney(n,c='USD'){return new Intl.NumberFormat('es-DO',{style:'currency',currency:c}).format(Number(n||0))}
   function ccPage(name){
@@ -384,7 +396,7 @@
     const host=$('clientProducts');host.replaceChildren();const {data,error}=await client.from('products').select('id,name,description,face_value,price,currency,country,category,brand,product_type,seller_name,availability').eq('active',true).order('price');
     if(error){host.textContent='No se pudo cargar el catálogo.';return}ccProducts=data||[];if($('cardsProductList'))ccRenderCards();
     if(!ccProducts.length){const empty=document.createElement('div');empty.className='cc-empty';empty.textContent='No hay productos CC disponibles todavía.';host.append(empty);return}
-    ccProducts.forEach(p=>{const card=document.createElement('article');card.className='cc-product';const title=document.createElement('strong');title.textContent=p.name;const desc=document.createElement('small');desc.textContent=(p.description||'Producto CC')+' · Valor '+ccMoney(p.face_value,p.currency);const price=document.createElement('strong');price.textContent=ccMoney(p.price,p.currency);const add=document.createElement('button');add.type='button';add.textContent='Agregar al carrito';add.addEventListener('click',()=>{const found=ccCart.find(x=>x.id===p.id);if(found)found.quantity++;else ccCart.push({id:p.id,name:p.name,price:Number(p.price),currency:p.currency,quantity:1});$('clientCartCount').textContent=ccCart.reduce((n,x)=>n+x.quantity,0);add.textContent='Agregado ✓';window.setTimeout(()=>add.textContent='Agregar al carrito',900)});card.append(title,desc,price,add);host.append(card)});
+    ccProducts.forEach(p=>{const card=document.createElement('article');card.className='cc-product';const title=document.createElement('strong');title.textContent=p.name;const desc=document.createElement('small');desc.textContent=(p.description||'Producto CC')+' · Valor '+ccMoney(p.face_value,p.currency);const price=document.createElement('strong');price.textContent=ccMoney(p.price,p.currency);const add=document.createElement('button');add.type='button';add.textContent='Agregar al carrito';add.addEventListener('click',()=>{const found=ccCart.find(x=>x.id===p.id);if(found)found.quantity++;else ccCart.push({id:p.id,name:p.name,price:Number(p.price),currency:p.currency,quantity:1});$('clientCartCount').textContent=ccCart.reduce((n,x)=>n+x.quantity,0);add.textContent='Agregado ✓';window.setTimeout(()=>add.textContent='Agregar al carrito',900)});card.append(title,desc,price,add);if(String(p.name||'').trim().toLowerCase()==='cc')ccAppendDemoForm(card);host.append(card)});
   }
 
   function ccFillCardOptions(id,key,placeholder){
