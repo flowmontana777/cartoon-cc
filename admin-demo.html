@@ -47,7 +47,9 @@ async function refresh(){
  $('productsCount').textContent=products.filter(p=>p.active).length;
  const paid=orders.filter(o=>['paid','fulfilled'].includes(o.status));
  $('sales').textContent=money(paid.reduce((s,o)=>s+Number(o.subtotal||0),0),'USD');
- const itemResult=orders.length?await db.from('order_items').select('order_id,product_name,quantity').in('order_id',orders.map(o=>o.id)):{data:[],error:null};\n if(itemResult.error){message('globalMsg',itemResult.error.message,true);return;}\n renderProducts();renderOrders(orders,itemResult.data||[]);await refreshStockCount();
+ const itemResult=orders.length?await db.from('order_items').select('order_id,product_name,quantity').in('order_id',orders.map(o=>o.id)):{data:[],error:null};
+ if(itemResult.error){message('globalMsg',itemResult.error.message,true);return;}
+ renderProducts();renderOrders(orders,itemResult.data||[]);await refreshStockCount();
 }
 function renderProducts(){
  const list=$('productList');list.replaceChildren();const sel=$('stockProduct');sel.replaceChildren();
@@ -60,14 +62,17 @@ function renderProducts(){
  });
  if(!sel.options.length)sel.append(node('option',null,'Crea y activa un producto primero'));
 }
-async function toggleProduct(p){const {error}=await db.from('products').update({active:!p.active}).eq('id',p.id);if(error)message('globalMsg',error.message,true);else await refresh()}\nasync function editProduct(p){const name=window.prompt('Nombre del producto:',p.name);if(name===null)return;const price=window.prompt('Precio de venta ('+p.currency+'):',String(p.price));if(price===null)return;const face=window.prompt('Valor de la tarjeta ('+p.currency+'):',String(p.face_value));if(face===null)return;const description=window.prompt('Descripción:',p.description||'');if(description===null)return;const payload={name:name.trim(),price:Number(price),face_value:Number(face),description:description.trim()};if(!payload.name||!Number.isFinite(payload.price)||payload.price<0||!Number.isFinite(payload.face_value)||payload.face_value<=0){message('globalMsg','Revisa el nombre, precio y valor de la tarjeta.',true);return;}const {error}=await db.from('products').update(payload).eq('id',p.id);if(error)message('globalMsg',error.message,true);else await refresh()}
-function renderOrders(orders,items){\n const grouped={};items.forEach(x=>(grouped[x.order_id] ||= []).push(x));
+async function toggleProduct(p){const {error}=await db.from('products').update({active:!p.active}).eq('id',p.id);if(error)message('globalMsg',error.message,true);else await refresh()}
+async function editProduct(p){const name=window.prompt('Nombre del producto:',p.name);if(name===null)return;const price=window.prompt('Precio de venta ('+p.currency+'):',String(p.price));if(price===null)return;const face=window.prompt('Valor de la tarjeta ('+p.currency+'):',String(p.face_value));if(face===null)return;const description=window.prompt('Descripción:',p.description||'');if(description===null)return;const payload={name:name.trim(),price:Number(price),face_value:Number(face),description:description.trim()};if(!payload.name||!Number.isFinite(payload.price)||payload.price<0||!Number.isFinite(payload.face_value)||payload.face_value<=0){message('globalMsg','Revisa el nombre, precio y valor de la tarjeta.',true);return;}const {error}=await db.from('products').update(payload).eq('id',p.id);if(error)message('globalMsg',error.message,true);else await refresh()}
+function renderOrders(orders,items){
+ const grouped={};items.forEach(x=>(grouped[x.order_id] ||= []).push(x));
  const list=$('orderList');list.replaceChildren();
  if(!orders.length){list.append(node('p','empty','Todavía no hay pedidos.'));return}
  const labels={pending:'Pendiente',paid:'Pagado',fulfilled:'Entregado',cancelled:'Cancelado',refunded:'Reembolsado'};
  orders.forEach(o=>{
   const item=node('div','item'),head=node('div','itemhead');head.append(node('strong',null,'Pedido #'+o.id.slice(0,8).toUpperCase()),node('span','tag',labels[o.status]||o.status));
-  item.append(head,node('div','muted',new Date(o.created_at).toLocaleString('es-DO')+' · '+money(o.subtotal,o.currency)+' · Cliente '+o.user_id.slice(0,8)));\n const detail=(grouped[o.id]||[]).map(x=>x.product_name+' × '+x.quantity).join(' · ');if(detail)item.append(node('div','muted',detail));
+  item.append(head,node('div','muted',new Date(o.created_at).toLocaleString('es-DO')+' · '+money(o.subtotal,o.currency)+' · Cliente '+o.user_id.slice(0,8)));
+ const detail=(grouped[o.id]||[]).map(x=>x.product_name+' × '+x.quantity).join(' · ');if(detail)item.append(node('div','muted',detail));
   const row=node('div','statusrow'),select=document.createElement('select');
   ['pending','paid','fulfilled','cancelled','refunded'].forEach(s=>{const opt=node('option',null,labels[s]);opt.value=s;opt.selected=s===o.status;select.append(opt)});
   const save=node('button','btn secondary','Actualizar estado');save.type='button';save.addEventListener('click',async()=>{
