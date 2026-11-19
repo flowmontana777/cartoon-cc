@@ -1,6 +1,6 @@
 # CARTOON CC
 
-Tienda de tarjetas de regalo con frontend estático y Supabase Auth/Postgres.
+Tienda digital CC con frontend estático y Supabase Auth/Postgres.
 
 ## Archivos principales
 
