@@ -65,7 +65,7 @@ html.auth-check body{visibility:hidden}
 <div class="showcase"><div class="glow"></div><div class="mascot"><div class="mascot-face" aria-label="Logo oficial CARTOON CC"><img src="https://i.ibb.co/Jj7PYxk6/80674-FC5-F9-A1-4668-8-EA0-1979350-DCA48.png" alt="Logo oficial CARTOON CC"></div><div class="mascot-label">CARTOON CC</div></div><div class="float-card one"><small>ELIGE TU VALOR</small><strong>$10 — $100</strong></div><div class="float-card two"><small>GIFT CARDS</small><strong>Tu regalo, a tu manera ✦</strong></div></div>
 </section>
 <section class="wrap catalog" id="catalogo">
-<div class="section-head"><div><div class="eyebrow">CATÁLOGO</div><h2>Elige tu tarjeta</h2></div><p>Valores de ejemplo para esta demostración.</p></div>
+<div class="section-head"><div><div class="eyebrow">CATÁLOGO</div><h2>Elige tu tarjeta</h2></div><p>Precios y disponibilidad actualizados desde nuestro catálogo.</p></div>
 <form class="price-filter" id="priceFilter" onsubmit="applyPriceFilter(event)">
 <label>Precio mínimo (USD)<input id="minPrice" type="number" min="0" step="0.01" value="5" inputmode="decimal" required></label>
 <label>Precio máximo (USD)<input id="maxPrice" type="number" min="0" step="0.01" value="22" inputmode="decimal" required></label>
@@ -74,12 +74,12 @@ html.auth-check body{visibility:hidden}
 </form>
 <div class="grid" id="productGrid"><p class="desc">Cargando catálogo…</p></div>
 </section>
-<section class="wrap features id="ventajas"><div class="section-head"><div><div class="eyebrow">SIMPLE Y DIRECTO</div><h2>Una experiencia sin vueltas</h2></div></div>
+<section class="wrap features" id="ventajas"><div class="section-head"><div><div class="eyebrow">SIMPLE Y DIRECTO</div><h2>Una experiencia sin vueltas</h2></div></div>
 <div class="feature-grid"><div class="feature"><div class="ico">✦</div><h3>1. Escoge tu tarjeta</h3><p>Explora los valores disponibles y selecciona la opción que mejor se adapte a tu regalo.</p></div><div class="feature"><div class="ico">▣</div><h3>2. Revisa tu pedido</h3><p>Confirma los detalles antes de continuar. Los precios y productos definitivos se configurarán al lanzar la tienda.</p></div><div class="feature"><div class="ico">♡</div><h3>3. Recibe soporte</h3><p>Si necesitas ayuda con tu pedido, tendrás un canal de atención al cliente.</p></div></div>
 </section>
 <section class="wrap" id="ayuda"><div class="bottom-cta"><div><h2>¿Listo para descubrir CARTOON CC?</h2><p>Estamos preparando la experiencia completa de la tienda.</p></div><a class="btn primary" href="#catalogo">Ver tarjetas ↗</a></div></section>
 </main>
-<footer><div class="wrap foot"><span>© 2026 CARTOON CC. Todos los derechos reservados.</span><span>Demo visual · Los pedidos y pagos aún no están habilitados.</span></div></footer>
+<footer><div class="wrap foot"><span>© 2026 CARTOON CC. Todos los derechos reservados.</span><span>Los pedidos se registran como pendientes. Los pagos se activarán próximamente.</span></div></footer>
 <div class="toast" id="toast"></div>
 <script>
 let cart=[],toastTimer,products=[];
@@ -129,11 +129,5 @@ async function checkoutCart(){
  demoToast('Pedido '+String(data.id).slice(0,8).toUpperCase()+' creado. Estado: pendiente.');
 }
 document.addEventListener('DOMContentLoaded',loadCatalog);
-</script>
-</body></html>+min+' y 
-</script>
-</body></html>+max+' USD.'
-    : 'No hay tarjetas en ese rango de precios.';
-}
 </script>
 </body></html>
