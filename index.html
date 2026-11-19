@@ -33,7 +33,7 @@ html.auth-check body{visibility:hidden}
   document.documentElement.classList.add('auth-check');
   const URL='https://hfovblodnovuettvvifp.supabase.co';
   const KEY='sb_publishable_Bqoj43-2y7bJp9bZms_O9g_roGOk2_3';
-  const client=window.supabase.createClient(URL,KEY);
+  const client=window.supabase.createClient(URL,KEY); window.ccSupabase=client;
   client.auth.getUser().then(({data,error})=>{
     if(error || !data || !data.user){
       window.location.replace('cuenta.html?next='+encodeURIComponent('index.html'));
@@ -52,7 +52,7 @@ html.auth-check body{visibility:hidden}
 <header><div class="wrap nav">
 <a class="brand" href="#"><div class="brandmark" aria-label="Logo oficial CARTOON CC"><img src="https://i.ibb.co/Jj7PYxk6/80674-FC5-F9-A1-4668-8-EA0-1979350-DCA48.png" alt="Logo oficial CARTOON CC"></div><span>CARTOON <em>CC</em></span></a>
 <nav class="links"><a href="#catalogo">Tarjetas</a><a href="#ventajas">Cómo funciona</a><a href="#ayuda">Ayuda</a></nav>
-<div class="actions"><a class="btn" href="cuenta.html">Iniciar sesión</a><button class="btn primary" onclick="demoToast('Tu carrito tiene '+cart+' tarjeta(s).')">Carrito <span class="cart-count" id="count">0</span></button></div>
+<div class="actions"><a class="btn" href="cuenta.html">Iniciar sesión</a><button class="btn primary" onclick="checkoutCart()">Carrito <span class="cart-count" id="count">0</span></button></div>
 </div></header>
 <main>
 <section class="wrap hero">
@@ -72,14 +72,9 @@ html.auth-check body{visibility:hidden}
 <button class="btn primary" type="submit">Buscar</button>
 <p class="filter-status" id="filterStatus" aria-live="polite">Mostrando tarjetas entre $5 y $22 USD.</p>
 </form>
-<div class="grid">
-<article class="product" data-price="10"><div class="gift"><div class="cc">CC $10</div><small>GIFT CARD</small></div><h3>Tarjeta CC — $10</h3><p class="desc">Una opción práctica para un pequeño detalle.</p><div class="price-row"><div class="price">$10 <small>USD · demo</small></div><button class="add" onclick="addCart('Tarjeta CC $10')" aria-label="Agregar tarjeta de 10 dólares">+</button></div></article>
-<article class="product" data-price="25"><div class="gift"><div class="cc">CC $25</div><small>GIFT CARD</small></div><h3>Tarjeta CC — $25</h3><p class="desc">Un regalo flexible para cualquier ocasión.</p><div class="price-row"><div class="price">$25 <small>USD · demo</small></div><button class="add" onclick="addCart('Tarjeta CC $25')" aria-label="Agregar tarjeta de 25 dólares">+</button></div></article>
-<article class="product" data-price="50"><div class="gift"><div class="cc">CC $50</div><small>GIFT CARD</small></div><h3>Tarjeta CC — $50</h3><p class="desc">Más opciones para sorprender a alguien.</p><div class="price-row"><div class="price">$50 <small>USD · demo</small></div><button class="add" onclick="addCart('Tarjeta CC $50')" aria-label="Agregar tarjeta de 50 dólares">+</button></div></article>
-<article class="product" data-price="100"><div class="gift"><div class="cc">CC $100</div><small>GIFT CARD</small></div><h3>Tarjeta CC — $100</h3><p class="desc">Un detalle especial con mayor valor.</p><div class="price-row"><div class="price">$100 <small>USD · demo</small></div><button class="add" onclick="addCart('Tarjeta CC $100')" aria-label="Agregar tarjeta de 100 dólares">+</button></div></article>
-</div>
+<div class="grid" id="productGrid"><p class="desc">Cargando catálogo…</p></div>
 </section>
-<section class="wrap features" id="ventajas"><div class="section-head"><div><div class="eyebrow">SIMPLE Y DIRECTO</div><h2>Una experiencia sin vueltas</h2></div></div>
+<section class="wrap features id="ventajas"><div class="section-head"><div><div class="eyebrow">SIMPLE Y DIRECTO</div><h2>Una experiencia sin vueltas</h2></div></div>
 <div class="feature-grid"><div class="feature"><div class="ico">✦</div><h3>1. Escoge tu tarjeta</h3><p>Explora los valores disponibles y selecciona la opción que mejor se adapte a tu regalo.</p></div><div class="feature"><div class="ico">▣</div><h3>2. Revisa tu pedido</h3><p>Confirma los detalles antes de continuar. Los precios y productos definitivos se configurarán al lanzar la tienda.</p></div><div class="feature"><div class="ico">♡</div><h3>3. Recibe soporte</h3><p>Si necesitas ayuda con tu pedido, tendrás un canal de atención al cliente.</p></div></div>
 </section>
 <section class="wrap" id="ayuda"><div class="bottom-cta"><div><h2>¿Listo para descubrir CARTOON CC?</h2><p>Estamos preparando la experiencia completa de la tienda.</p></div><a class="btn primary" href="#catalogo">Ver tarjetas ↗</a></div></section>
@@ -87,27 +82,53 @@ html.auth-check body{visibility:hidden}
 <footer><div class="wrap foot"><span>© 2026 CARTOON CC. Todos los derechos reservados.</span><span>Demo visual · Los pedidos y pagos aún no están habilitados.</span></div></footer>
 <div class="toast" id="toast"></div>
 <script>
-let cart=0,toastTimer;
-function addCart(name){cart++;document.getElementById('count').textContent=cart;demoToast(name+' agregada al carrito de demostración.')}
-function demoToast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2600)}
-function applyPriceFilter(event){
-  event.preventDefault();
-  const min=Number(document.getElementById('minPrice').value);
-  const max=Number(document.getElementById('maxPrice').value);
-  const status=document.getElementById('filterStatus');
-  if(!Number.isFinite(min)||!Number.isFinite(max)||min<0||max<min){
-    status.textContent='Revisa el rango: el precio mínimo debe ser menor o igual al máximo.';
-    return;
-  }
-  let shown=0;
-  document.querySelectorAll('.product[data-price]').forEach(card=>{
-    const price=Number(card.dataset.price);
-    const visible=price>=min&&price<=max;
-    card.hidden=!visible;
-    if(visible) shown++;
-  });
-  status.textContent=shown
-    ? 'Se encontraron '+shown+' tarjeta(s) entre 
+let cart=[],toastTimer,products=[];
+function demoToast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3200)}
+function addCart(id,name){const line=cart.find(x=>x.product_id===id);if(line)line.quantity++;else cart.push({product_id:id,quantity:1,name});document.getElementById('count').textContent=cart.reduce((n,x)=>n+x.quantity,0);demoToast(name+' agregado al carrito.')}
+function money(value,currency){return new Intl.NumberFormat('es-DO',{style:'currency',currency:currency||'USD'}).format(Number(value||0))}
+function renderProducts(){
+ const grid=document.getElementById('productGrid');grid.replaceChildren();
+ if(!products.length){const p=document.createElement('p');p.className='desc';p.textContent='Estamos preparando el catálogo. Vuelve pronto.';grid.appendChild(p);return;}
+ products.forEach(p=>{
+  const card=document.createElement('article');card.className='product';card.dataset.price=String(p.price);
+  const gift=document.createElement('div');gift.className='gift';
+  const value=document.createElement('div');value.className='cc';value.textContent='CC '+money(p.face_value,p.currency);gift.appendChild(value);
+  const small=document.createElement('small');small.textContent='GIFT CARD';gift.appendChild(small);
+  const h=document.createElement('h3');h.textContent=p.name;
+  const desc=document.createElement('p');desc.className='desc';desc.textContent=p.description||'Tarjeta de regalo digital.';
+  const row=document.createElement('div');row.className='price-row';
+  const price=document.createElement('div');price.className='price';price.textContent=money(p.price,p.currency);
+  const add=document.createElement('button');add.className='add';add.type='button';add.textContent='+';add.setAttribute('aria-label','Agregar '+p.name);add.addEventListener('click',()=>addCart(p.id,p.name));
+  row.append(price,add);card.append(gift,h,desc,row);grid.appendChild(card);
+ });
+ applyCurrentFilter();
+}
+function applyCurrentFilter(){
+ const min=Number(document.getElementById('minPrice').value),max=Number(document.getElementById('maxPrice').value);
+ let shown=0;document.querySelectorAll('.product[data-price]').forEach(card=>{const visible=Number(card.dataset.price)>=min&&Number(card.dataset.price)<=max;card.hidden=!visible;if(visible)shown++;});
+ document.getElementById('filterStatus').textContent=shown?'Se encontraron '+shown+' tarjeta(s) en el rango seleccionado.':'No hay tarjetas en ese rango de precios.';
+}
+function applyPriceFilter(event){event.preventDefault();const min=Number(document.getElementById('minPrice').value),max=Number(document.getElementById('maxPrice').value);if(!Number.isFinite(min)||!Number.isFinite(max)||min<0||max<min){document.getElementById('filterStatus').textContent='Revisa el rango de precios.';return;}applyCurrentFilter();}
+async function loadCatalog(){
+ const client=window.ccSupabase;if(!client)return;
+ const {data,error}=await client.from('products').select('id,name,description,face_value,price,currency,image_url').eq('active',true).order('price',{ascending:true});
+ if(error){demoToast('No pudimos cargar el catálogo. Intenta actualizar.');return;}
+ products=data||[];renderProducts();
+}
+async function checkoutCart(){
+ if(!cart.length){demoToast('Tu carrito está vacío.');return;}
+ const client=window.ccSupabase;if(!client){demoToast('No se pudo conectar con la tienda.');return;}
+ const {data:{user},error:userError}=await client.auth.getUser();
+ if(userError||!user){window.location.href='cuenta.html?next='+encodeURIComponent('index.html');return;}
+ const summary=cart.map(x=>x.name+' × '+x.quantity).join('\n');
+ if(!window.confirm('Confirmar pedido:\n'+summary+'\n\nSe creará un pedido pendiente. Todavía no se realizará ningún cobro.'))return;
+ const items=cart.map(({product_id,quantity})=>({product_id,quantity}));
+ const {data,error}=await client.rpc('create_order',{p_items:items});
+ if(error){demoToast(error.message||'No se pudo crear el pedido.');return;}
+ cart=[];document.getElementById('count').textContent='0';
+ demoToast('Pedido '+String(data.id).slice(0,8).toUpperCase()+' creado. Estado: pendiente.');
+}
+document.addEventListener('DOMContentLoaded',loadCatalog);
 </script>
 </body></html>+min+' y 
 </script>
