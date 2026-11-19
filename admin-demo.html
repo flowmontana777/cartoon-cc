@@ -14,6 +14,9 @@
 <label class="field"><span>Descripción</span><textarea id="pDescription" maxlength="500" placeholder="Descripción del producto"></textarea></label>
 <div class="grid2"><label class="field"><span>Valor CC</span><input id="pFace" type="number" min="0.01" step="0.01" required></label><label class="field"><span>Precio de venta</span><input id="pPrice" type="number" min="0" step="0.01" required></label></div>
 <div class="grid2"><label class="field"><span>Moneda</span><select id="pCurrency"><option value="USD">USD</option><option value="DOP">DOP</option></select></label><label class="field"><span>URL de imagen (opcional)</span><input id="pImage" type="url" placeholder="https://..."></label></div>
+<div class="grid2"><label class="field"><span>País</span><input id="pCountry" maxlength="80" placeholder="Ej. Estados Unidos"></label><label class="field"><span>Categoría</span><input id="pCategory" maxlength="80" placeholder="Ej. Productos digitales"></label></div>
+<div class="grid2"><label class="field"><span>Marca</span><input id="pBrand" maxlength="80" placeholder="Marca del producto"></label><label class="field"><span>Tipo de producto</span><input id="pType" maxlength="80" placeholder="Ej. Gift card"></label></div>
+<div class="grid2"><label class="field"><span>Nombre del vendedor</span><input id="pSeller" maxlength="100" placeholder="Tienda o vendedor autorizado"></label><label class="field"><span>Disponibilidad</span><select id="pAvailability"><option value="available">Disponible</option><option value="unavailable">No disponible</option><option value="preorder">Preventa</option></select></label></div>
 <button class="btn" id="saveProduct" type="submit">Guardar producto</button></form><div id="productMsg" class="msg"></div></div>
 <div class="box"><h2>Catálogo actual</h2><div class="list" id="productList"><p class="empty">Cargando productos…</p></div></div>
 <div class="box full" id="pedidos"><h2>Gestión de pedidos</h2><p class="muted">Verifica el pago antes de cambiar un pedido a “Pagado”. Los estados quedan registrados en el pedido.</p><div class="list" id="orderList"><p class="empty">Cargando pedidos…</p></div></div>
@@ -37,7 +40,7 @@ async function guard(){
 }
 async function refresh(){
  const [pr,or,cr]=await Promise.all([
-  db.from('products').select('id,name,description,face_value,price,currency,active').order('created_at',{ascending:false}),
+  db.from('products').select('id,name,description,face_value,price,currency,active,country,category,brand,product_type,seller_name,availability').order('created_at',{ascending:false}),
   db.from('orders').select('id,user_id,status,subtotal,currency,created_at').order('created_at',{ascending:false}).limit(100),
   db.from('profiles').select('id',{count:'exact',head:true})
  ]);
@@ -56,7 +59,7 @@ function renderProducts(){
  if(!products.length)list.append(node('p','empty','No hay productos creados todavía.'));
  products.forEach(p=>{
   const item=node('div','item'),head=node('div','itemhead'),name=node('strong',null,p.name),tag=node('span','tag',p.active?'ACTIVO':'INACTIVO');
-  head.append(name,tag);item.append(head,node('div','muted',money(p.price,p.currency)+' · Valor '+money(p.face_value,p.currency)));
+  head.append(name,tag);item.append(head,node('div','muted',money(p.price,p.currency)+' · Valor '+money(p.face_value,p.currency)));const metadata=[p.country,p.category,p.brand,p.product_type,p.seller_name,p.availability].filter(Boolean).join(' · ');if(metadata)item.append(node('div','muted',metadata));
   const actions=node('div','actions');const edit=node('button','btn secondary','Editar');edit.type='button';edit.addEventListener('click',()=>editProduct(p));const toggle=node('button','btn secondary',p.active?'Desactivar':'Activar');toggle.type='button';toggle.addEventListener('click',()=>toggleProduct(p));actions.append(edit,toggle);item.append(actions);list.append(item);
   if(p.active){const opt=node('option',null,p.name+' — '+money(p.face_value,p.currency));opt.value=p.id;sel.append(opt)}
  });
@@ -86,7 +89,7 @@ function renderOrders(orders,items){
 }
 $('productForm').addEventListener('submit',async e=>{
  e.preventDefault();const button=$('saveProduct');button.disabled=true;
- const payload={name:$('pName').value.trim(),description:$('pDescription').value.trim(),face_value:Number($('pFace').value),price:Number($('pPrice').value),currency:$('pCurrency').value,image_url:$('pImage').value.trim()||null,active:true};
+ const payload={name:$('pName').value.trim(),description:$('pDescription').value.trim(),face_value:Number($('pFace').value),price:Number($('pPrice').value),currency:$('pCurrency').value,image_url:$('pImage').value.trim()||null,country:$('pCountry').value.trim()||null,category:$('pCategory').value.trim()||null,brand:$('pBrand').value.trim()||null,product_type:$('pType').value.trim()||null,seller_name:$('pSeller').value.trim()||null,availability:$('pAvailability').value,active:true};
  const {error}=await db.from('products').insert(payload);button.disabled=false;
  if(error){message('productMsg',error.message,true);return}
  $('productForm').reset();message('productMsg','Producto guardado correctamente.');await refresh();
