@@ -83,7 +83,7 @@ html.auth-check body{visibility:hidden}
 <script>
 let cart=[],toastTimer,products=[];
 function demoToast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3200)}
-function addCart(id,name){const line=cart.find(x=>x.product_id===id);if(line)line.quantity++;else cart.push({product_id:id,quantity:1,name});document.getElementById('count').textContent=cart.reduce((n,x)=>n+x.quantity,0);demoToast(name+' agregado al carrito.')}
+function addCart(id,name){const line=cart.find(x=>x.product_id===id);if(line)line.quantity++;else{const p=products.find(x=>x.id===id);cart.push({product_id:id,quantity:1,name,price:Number(p?.price||0),currency:p?.currency||'USD'});}document.getElementById('count').textContent=cart.reduce((n,x)=>n+x.quantity,0);demoToast(name+' agregado al carrito.')}
 function money(value,currency){return new Intl.NumberFormat('es-DO',{style:'currency',currency:currency||'USD'}).format(Number(value||0))}
 function renderProducts(){
  const grid=document.getElementById('productGrid');grid.replaceChildren();
@@ -125,7 +125,7 @@ async function checkoutCart(){
  const {data,error}=await client.rpc('create_order',{p_items:items});
  if(error){demoToast(error.message||'No se pudo crear el pedido.');return;}
  cart=[];document.getElementById('count').textContent='0';
- demoToast('Pedido '+String(data.id).slice(0,8).toUpperCase()+' creado. Estado: pendiente.');
+ demoToast('Pedido '+String(data.id).slice(0,8).toUpperCase()+' creado por '+money(data.subtotal,data.currency)+'. Estado: pendiente.');
 }
 document.addEventListener('DOMContentLoaded',loadCatalog);
 </script>
