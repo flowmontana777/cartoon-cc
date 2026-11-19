@@ -25,6 +25,14 @@
 .page-flash{animation:tapFlash .35s ease}@keyframes pageEnter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}@keyframes menuPop{from{opacity:0;transform:translateY(-7px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes tapFlash{0%{transform:scale(.985)}60%{transform:scale(1.008)}100%{transform:scale(1)}}
 @media(max-width:600px){.client-nav{gap:7px;padding:9px}.client-nav button{padding:10px;font-size:10px}.user-menu-wrap{width:100%;margin-left:0}.user-trigger{width:100%;justify-content:center}.user-menu{left:0;right:0;width:100%}.cc-product-grid{grid-template-columns:1fr}}
 
+
+.cc-filter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.cc-filter-grid label{display:grid;gap:6px;color:#31566b;font-size:12px;font-weight:800}
+.cc-filter-grid input,.cc-filter-grid select{width:100%;min-width:0;border:1px solid #d3eaf5;border-radius:12px;padding:12px;background:#fff;color:#263b4a;font:inherit;box-sizing:border-box}
+.cc-filter-grid input:focus,.cc-filter-grid select:focus{outline:2px solid #35b9ed;outline-offset:1px}
+@media(max-width:650px){.cc-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.cc-filter-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -50,13 +58,36 @@
 <div class="dash-stats"><div class="dash-stat"><small>MIS PEDIDOS</small><strong id="ordersCount">0</strong></div><div class="dash-stat"><small>COMPRAS COMPLETADAS</small><strong id="completedCount">0</strong></div><div class="dash-stat"><small>TOTAL COMPLETADO</small><strong id="spentTotal">$0.00</strong></div></div>
 
 <nav class="client-nav" aria-label="Navegación de cliente">
-<button type="button" class="active" data-page="news">📰 News</button><button type="button" data-page="bases">🪸 List Bases</button><button type="button" data-page="buy">🪙 Buy CC</button><button type="button" data-page="balance">💎 Add Balance</button><button type="button" data-page="cart">🛒 Cart <span id="clientCartCount">0</span></button><button type="button" data-page="support">🐬 Support</button>
+<button type="button" class="active" data-page="news">📰 News</button><button type="button" data-page="bases">🪸 List Bases</button><button type="button" data-page="cards">💳 Cards</button><button type="button" data-page="buy">🪙 Buy CC</button><button type="button" data-page="balance">💎 Add Balance</button><button type="button" data-page="cart">🛒 Cart <span id="clientCartCount">0</span></button><button type="button" data-page="support">🐬 Support</button>
 <div class="user-menu-wrap"><button type="button" class="user-trigger" id="userMenuToggle">🌊 <span id="menuUserName">CC Member</span> ▾</button>
 <div class="user-menu hidden" id="userMenu"><div class="menu-profile">🌊 <span id="menuUserFull">CC Member</span><small>CC Member</small></div>
 <button type="button" class="menu-link" data-page="account">🪪 Account</button><button type="button" class="menu-link" data-page="balance">💎 Add Balance</button><button type="button" class="menu-link" data-page="mycc">🪙 My CC</button><button type="button" class="menu-link" data-page="referral">📡 Referral</button><button type="button" class="menu-link logout-menu" id="menuLogout">🚪 Logout</button></div></div></nav>
 <div id="clientPages">
 <section class="dash-box client-page active" data-panel="news"><h3>📰 News</h3><p class="page-intro">Novedades y avisos de CARTOON CC.</p><div class="cc-empty">Bienvenido a CC. Aquí aparecerán los anuncios y novedades oficiales de la plataforma.</div></section>
 <section class="dash-box client-page" data-panel="bases"><h3>🪸 List Bases</h3><p class="page-intro">Explora las listas disponibles en CC.</p><div class="cc-empty">Todavía no hay listas publicadas. Cuando haya contenido disponible aparecerá aquí.</div></section>
+
+<section class="dash-box client-page" data-panel="cards">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+    <div><small style="letter-spacing:2px;color:#d5f7ff">🌊 CC MARKET</small><h3 style="margin:5px 0">💳 Cards</h3><p class="page-intro">Explora los productos disponibles con filtros rápidos.</p></div>
+    <button type="button" class="cc-action secondary" id="toggleCardsFilter">🔽 Hide Filter</button>
+  </div>
+  <div id="cardsFilterPanel" style="background:#effaff;color:#31566b;border:1px solid #cdeefa;border-radius:18px;padding:16px;margin:12px 0">
+    <strong>🔎 Smart Filter</strong><p style="font-size:12px;color:#66869a">Usa uno o varios filtros para encontrar productos CC.</p>
+    <div class="cc-filter-grid">
+      <label>Nombre del producto<input id="cardsSearch" type="search" placeholder="Buscar por nombre o descripción"></label>
+      <label>Moneda<select id="cardsCurrency"><option value="">Todas</option><option value="USD">USD</option><option value="DOP">DOP</option></select></label>
+      <label>Precio mínimo<input id="cardsMin" type="number" min="0" step="0.01" placeholder="Mínimo"></label>
+      <label>Precio máximo<input id="cardsMax" type="number" min="0" step="0.01" placeholder="Máximo"></label>
+      <label>Ordenar por<select id="cardsSort"><option value="default">Recomendados</option><option value="low">Precio: menor a mayor</option><option value="high">Precio: mayor a menor</option><option value="name">Nombre A–Z</option></select></label>
+    </div>
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:15px">
+      <button type="button" class="cc-action" id="cardsSearchButton">🔎 Search</button>
+      <button type="button" class="cc-action secondary" id="cardsResetButton">♻️ Reset Filter</button>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0;color:#cceeff;font-size:12px"><span id="cardsPageLabel">PAGE 1</span><span id="cardsTotalLabel">TOTAL PRODUCTS 0</span></div>
+  <div id="cardsProductList" class="cc-product-grid"><div class="cc-empty">Cargando catálogo…</div></div>
+</section>
 <section class="dash-box client-page" data-panel="buy"><h3>🪙 Buy CC</h3><p class="page-intro">Selecciona un producto del catálogo para agregarlo al carrito.</p><div id="clientProducts" class="cc-product-grid"><div class="cc-empty">Cargando catálogo…</div></div></section>
 <section class="dash-box client-page" data-panel="balance"><h3>💎 Add Balance</h3><p class="page-intro">Consulta cómo añadir saldo a tu cuenta CC.</p><div class="cc-empty">La recarga de saldo aún no está habilitada. Próximamente se publicarán los métodos de pago oficiales. No envíes dinero a cuentas no verificadas.</div></section>
 <section class="dash-box client-page" data-panel="cart"><h3>🛒 Cart</h3><p class="page-intro">Revisa tus artículos antes de crear el pedido.</p><div id="clientCartItems"></div><div id="clientCartTotal" class="order-meta"></div><button type="button" class="cc-action" id="clientCheckout">Confirmar pedido</button><div class="dash-notice" id="cartNotice"></div></section>
@@ -269,7 +300,7 @@
     document.querySelectorAll('[data-panel]').forEach(el=>el.classList.toggle('active',el.dataset.panel===name));
     document.querySelectorAll('[data-page]').forEach(el=>el.classList.toggle('active',el.dataset.page===name));
     const panel=document.querySelector('[data-panel="'+name+'"]');if(panel){panel.classList.remove('page-flash');void panel.offsetWidth;panel.classList.add('page-flash')}
-    $('userMenu').classList.add('hidden');if(name==='buy')ccLoadProducts();if(name==='cart')ccRenderCart();if(name==='mycc')ccRenderMyCC();
+    $('userMenu').classList.add('hidden');if(name==='buy'||name==='cards'){ccLoadProducts().then(()=>{if(name==='cards')ccRenderCards()})}if(name==='cart')ccRenderCart();if(name==='mycc')ccRenderMyCC();
   }
   document.querySelectorAll('[data-page]').forEach(btn=>btn.addEventListener('click',()=>ccPage(btn.dataset.page)));
   $('userMenuToggle').addEventListener('click',()=>$('userMenu').classList.toggle('hidden'));
@@ -277,10 +308,27 @@
   $('menuLogout').addEventListener('click',()=>$('logoutButton').click());
   async function ccLoadProducts(){
     const host=$('clientProducts');host.replaceChildren();const {data,error}=await client.from('products').select('id,name,description,face_value,price,currency').eq('active',true).order('price');
-    if(error){host.textContent='No se pudo cargar el catálogo.';return}ccProducts=data||[];
+    if(error){host.textContent='No se pudo cargar el catálogo.';return}ccProducts=data||[];if($('cardsProductList'))ccRenderCards();
     if(!ccProducts.length){const empty=document.createElement('div');empty.className='cc-empty';empty.textContent='No hay productos CC disponibles todavía.';host.append(empty);return}
     ccProducts.forEach(p=>{const card=document.createElement('article');card.className='cc-product';const title=document.createElement('strong');title.textContent=p.name;const desc=document.createElement('small');desc.textContent=(p.description||'Producto CC')+' · Valor '+ccMoney(p.face_value,p.currency);const price=document.createElement('strong');price.textContent=ccMoney(p.price,p.currency);const add=document.createElement('button');add.type='button';add.textContent='Agregar al carrito';add.addEventListener('click',()=>{const found=ccCart.find(x=>x.id===p.id);if(found)found.quantity++;else ccCart.push({id:p.id,name:p.name,price:Number(p.price),currency:p.currency,quantity:1});$('clientCartCount').textContent=ccCart.reduce((n,x)=>n+x.quantity,0);add.textContent='Agregado ✓';window.setTimeout(()=>add.textContent='Agregar al carrito',900)});card.append(title,desc,price,add);host.append(card)});
   }
+
+  function ccRenderCards(){
+    const host=$('cardsProductList');if(!host)return;host.replaceChildren();
+    const term=$('cardsSearch').value.trim().toLowerCase(),currency=$('cardsCurrency').value;
+    const min=$('cardsMin').value===''?null:Number($('cardsMin').value),max=$('cardsMax').value===''?null:Number($('cardsMax').value);
+    let rows=ccProducts.filter(p=>(!term||(p.name+' '+(p.description||'')).toLowerCase().includes(term))&&(!currency||p.currency===currency)&&(min===null||Number(p.price)>=min)&&(max===null||Number(p.price)<=max));
+    const sort=$('cardsSort').value;if(sort==='low')rows.sort((a,b)=>Number(a.price)-Number(b.price));if(sort==='high')rows.sort((a,b)=>Number(b.price)-Number(a.price));if(sort==='name')rows.sort((a,b)=>a.name.localeCompare(b.name));
+    $('cardsTotalLabel').textContent='TOTAL PRODUCTS '+rows.length;
+    if(!rows.length){const empty=document.createElement('div');empty.className='cc-empty';empty.textContent=ccProducts.length?'No hay productos que coincidan con esos filtros.':'Todavía no hay productos CC publicados.';host.append(empty);return}
+    rows.forEach(p=>{const card=document.createElement('article');card.className='cc-product';const title=document.createElement('strong');title.textContent=p.name;const desc=document.createElement('small');desc.textContent=(p.description||'Producto CC')+' · '+ccMoney(p.face_value,p.currency);const price=document.createElement('strong');price.textContent=ccMoney(p.price,p.currency);const add=document.createElement('button');add.type='button';add.textContent='Agregar al carrito';add.addEventListener('click',()=>{const found=ccCart.find(x=>x.id===p.id);if(found)found.quantity++;else ccCart.push({id:p.id,name:p.name,price:Number(p.price),currency:p.currency,quantity:1});$('clientCartCount').textContent=ccCart.reduce((n,x)=>n+x.quantity,0);add.textContent='Agregado ✓';window.setTimeout(()=>add.textContent='Agregar al carrito',900)});card.append(title,desc,price,add);host.append(card)});
+  }
+  $('cardsSearchButton').addEventListener('click',ccRenderCards);
+  ['cardsSearch','cardsCurrency','cardsMin','cardsMax','cardsSort'].forEach(id=>$(id).addEventListener('change',ccRenderCards));
+  $('cardsSearch').addEventListener('keydown',e=>{if(e.key==='Enter')ccRenderCards()});
+  $('cardsResetButton').addEventListener('click',()=>{$('cardsSearch').value='';$('cardsCurrency').value='';$('cardsMin').value='';$('cardsMax').value='';$('cardsSort').value='default';ccRenderCards()});
+  $('toggleCardsFilter').addEventListener('click',()=>{const panel=$('cardsFilterPanel');const hidden=panel.hidden=!panel.hidden;$('toggleCardsFilter').textContent=hidden?'🔼 Show Filter':'🔽 Hide Filter'});
+
   function ccRenderCart(){
     const host=$('clientCartItems');host.replaceChildren();if(!ccCart.length){const empty=document.createElement('div');empty.className='cc-empty';empty.textContent='Tu carrito está vacío. Entra en Buy CC para agregar productos.';host.append(empty);$('clientCartTotal').textContent='';$('clientCheckout').disabled=true;return}
     $('clientCheckout').disabled=false;const totals={};ccCart.forEach((item,i)=>{totals[item.currency]=(totals[item.currency]||0)+item.price*item.quantity;const row=document.createElement('div');row.className='cc-cart-row';const label=document.createElement('span');label.textContent=item.name+' × '+item.quantity+' — '+ccMoney(item.price*item.quantity,item.currency);const remove=document.createElement('button');remove.type='button';remove.textContent='Quitar';remove.addEventListener('click',()=>{ccCart.splice(i,1);$('clientCartCount').textContent=ccCart.reduce((n,x)=>n+x.quantity,0);ccRenderCart()});row.append(label,remove);host.append(row)});$('clientCartTotal').textContent='Total: '+Object.entries(totals).map(([c,v])=>ccMoney(v,c)).join(' · ');
