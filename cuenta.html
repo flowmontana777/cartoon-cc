@@ -26,7 +26,7 @@
 <p class="hint">Tu contraseña se procesa mediante Supabase Auth. Nunca compartas tu contraseña ni códigos de acceso. CARTOON CC nunca te pedirá que los envíes por chat.</p>
 </div></div>
 <div class="hidden" id="accountArea"><div class="dashboard">
-<div class="dash-head"><div><div class="eyebrow">PANEL DE CLIENTE</div><h2 id="welcomeName">Bienvenido</h2><p id="accountEmail"></p></div><div class="dash-actions"><a class="dash-link" href="index.html#catalogo">Ver catálogo ↗</a><button class="logout" id="logoutButton" type="button" style="width:auto">Cerrar sesión</button></div></div>
+<div class="dash-head"><div><div class="eyebrow">PANEL DE CLIENTE</div><h2 id="welcomeName">Bienvenido</h2><p id="accountEmail"></p></div><div class="dash-actions"><a class="dash-link hidden" id="adminLink" href="admin-demo.html">Administración ↗</a><a class="dash-link" href="index.html#catalogo">Ver catálogo ↗</a><button class="logout" id="logoutButton" type="button" style="width:auto">Cerrar sesión</button></div></div>
 <div class="dash-stats"><div class="dash-stat"><small>MIS PEDIDOS</small><strong id="ordersCount">0</strong></div><div class="dash-stat"><small>COMPRAS COMPLETADAS</small><strong id="completedCount">0</strong></div><div class="dash-stat"><small>TOTAL COMPLETADO</small><strong id="spentTotal">$0.00</strong></div></div>
 <div class="dash-grid"><section class="dash-box"><h3>Mi perfil</h3><form id="profileForm"><label class="field"><span>Nombre</span><input id="profileNameInput" type="text" maxlength="80" placeholder="Tu nombre"></label><label class="field"><span>Correo electrónico</span><input id="profileEmailInput" type="email" readonly></label><button class="dash-save" id="saveProfileButton" type="submit">Guardar cambios</button></form><div class="dash-notice" id="profileNotice" role="status" aria-live="polite"></div></section>
 <section class="dash-box"><h3>Historial de compras</h3><div class="order-list" id="orderList"><div class="empty-orders">Cargando tu historial…</div></div><div class="dash-notice" id="ordersNotice" role="status" aria-live="polite"></div></section></div>
@@ -104,7 +104,7 @@
     $("orderList").innerHTML='<div class="empty-orders">Cargando tu historial…</div>';
     try{
       const [profileResult,ordersResult]=await Promise.all([
-        client.from("profiles").select("display_name,email").eq("id",user.id).maybeSingle(),
+        client.from("profiles").select("display_name,email,role").eq("id",user.id).maybeSingle(),
         client.from("orders").select("id,status,subtotal,currency,created_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(50)
       ]);
       if(profileResult.error)throw profileResult.error;
@@ -114,6 +114,7 @@
       $("welcomeName").textContent=name? "Hola, "+name:"Bienvenido a CARTOON CC";
       $("profileNameInput").value=name;
       $("profileEmailInput").value=user.email||profile.email||"";
+      $("adminLink").classList.toggle("hidden",profile.role!=="admin");
       const orders=ordersResult.data||[];
       let items=[];
       if(orders.length){
@@ -124,7 +125,8 @@
       $("ordersCount").textContent=String(orders.length);
       const completed=orders.filter(o=>["paid","fulfilled"].includes(o.status));
       $("completedCount").textContent=String(completed.length);
-      $("spentTotal").textContent=money(completed.reduce((sum,o)=>sum+Number(o.subtotal||0),0),"USD");
+      const totals={};completed.forEach(o=>{totals[o.currency]=(totals[o.currency]||0)+Number(o.subtotal||0)});
+      $("spentTotal").textContent=Object.entries(totals).map(([currency,total])=>money(total,currency)).join(" · ")||money(0,"USD");
       renderOrders(orders,items);
     }catch(error){
       activeDashboardUserId=null;
@@ -217,8 +219,7 @@
     const { error } = await client.auth.signOut();
     $("logoutButton").disabled = false;
     if (error) {
-      $("accountNotice").textContent = error.message;
-      $("accountNotice").classList.add("show","error");
+      showDashboardNotice("ordersNotice",error.message,true);
     } else {
       showAuth();
       setMode("login");
