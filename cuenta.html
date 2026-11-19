@@ -39,6 +39,14 @@
 .seller-form input,.seller-form select,.seller-form textarea{width:100%;box-sizing:border-box;border:1px solid #435342;border-radius:11px;padding:12px;background:#101810;color:#f0f7ed;font:inherit;font-size:13px}
 .seller-form input:focus,.seller-form select:focus,.seller-form textarea:focus{outline:2px solid #9bdc44;outline-offset:1px}
 
+
+.seller-store-head{margin-bottom:12px}.seller-product-form{max-width:100%;padding:15px;border:1px solid #344331;border-radius:14px;background:#0d130d}
+.seller-product-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.seller-confirm{display:flex!important;align-items:flex-start;gap:9px;line-height:1.5}.seller-confirm input{width:auto!important;margin-top:2px}
+.seller-product-actions{display:flex;gap:9px;flex-wrap:wrap}.seller-product-card{border:1px solid #344331;border-radius:12px;padding:13px;background:#0e140e}
+.seller-product-card strong{font-size:13px}.seller-product-card small{display:block;color:#9aa394;font-size:10px;margin:6px 0}
+.seller-product-card button{margin:7px 7px 0 0}.seller-state{font-size:10px;color:#c5f58b;font-weight:900}
+@media(max-width:600px){.seller-product-fields{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -107,8 +115,8 @@
 <section class="dash-box client-page" data-panel="mycc"><h3>🪙 My CC</h3><p class="page-intro">Consulta tus pedidos y el estado de tus compras CC.</p><div id="myCcOrders" class="order-list"><div class="cc-empty">Cargando tus compras…</div></div></section>
 
 <section class="dash-box client-page" data-panel="seller">
-  <h3>🏪 Convertirse en vendedor</h3>
-  <p class="page-intro">Solicita abrir tu tienda dentro de CC. Nuestro equipo revisará tu solicitud antes de activar las ventas.</p>
+  <h3>🏪 Mi tienda CC</h3>
+  <p class="page-intro">Solicita abrir tu tienda. Cuando sea aprobada podrás publicar productos permitidos; cada publicación será revisada por administración antes de aparecer en el catálogo.</p>
   <form id="sellerApplicationForm" class="seller-form">
     <label>Nombre de tu tienda<input id="sellerStoreName" maxlength="80" minlength="2" required placeholder="Ej. Mi tienda CC"></label>
     <label>Qué deseas ofrecer
@@ -120,12 +128,35 @@
         <option value="other">Otros productos permitidos</option>
       </select>
     </label>
-    <label>Descripción de tu tienda<textarea id="sellerDescription" maxlength="1000" rows="4" placeholder="Describe los productos que ofrecerás en CC."></textarea></label>
+    <label>Descripción de tu tienda<textarea id="sellerDescription" maxlength="1000" rows="4" placeholder="Describe los productos legales que ofrecerás en CC."></textarea></label>
     <label>Correo de contacto<input id="sellerContactEmail" type="email" maxlength="254" required placeholder="tu@correo.com"></label>
     <button class="cc-action" id="sellerSubmit" type="submit">Enviar solicitud</button>
     <div id="sellerApplicationNotice" class="dash-notice" role="status"></div>
   </form>
   <div id="sellerApplicationStatus" class="cc-empty" style="margin-top:14px">Aún no has enviado una solicitud de vendedor.</div>
+  <div id="sellerStorePanel" class="hidden" style="margin-top:18px">
+    <div class="seller-store-head"><h3>📦 Publicar y administrar productos</h3><p class="page-intro">Los productos nuevos y los cambios quedan inactivos hasta que administración los revise. No publiques datos personales, identificadores, información financiera ni bases de datos de personas.</p></div>
+    <form id="sellerProductForm" class="seller-form seller-product-form">
+      <input id="sellerProductId" type="hidden">
+      <label>Nombre del producto<input id="sellerProductName" maxlength="120" required placeholder="Nombre del producto"></label>
+      <label>Descripción<textarea id="sellerProductDescription" maxlength="1000" rows="3" placeholder="Describe el producto y lo que incluye."></textarea></label>
+      <div class="seller-product-fields">
+        <label>Valor nominal<input id="sellerProductFaceValue" type="number" min="0.01" step="0.01" required></label>
+        <label>Precio de venta<input id="sellerProductPrice" type="number" min="0" step="0.01" required></label>
+        <label>Moneda<select id="sellerProductCurrency"><option value="USD">USD</option><option value="DOP">DOP</option></select></label>
+        <label>País<input id="sellerProductCountry" maxlength="80" placeholder="País"></label>
+        <label>Categoría<select id="sellerProductCategory"><option value="digital_goods">Productos digitales legales</option><option value="art_design">Arte y diseño</option><option value="software">Software autorizado</option><option value="collectibles">Coleccionables</option><option value="other">Otros permitidos</option></select></label>
+        <label>Marca<input id="sellerProductBrand" maxlength="80" placeholder="Marca"></label>
+        <label>Tipo de producto<input id="sellerProductType" maxlength="80" placeholder="Tipo"></label>
+        <label>Disponibilidad<select id="sellerProductAvailability"><option value="available">Disponible</option><option value="unavailable">No disponible</option><option value="preorder">Preventa</option></select></label>
+      </div>
+      <label class="seller-confirm"><input id="sellerProductLegal" type="checkbox" required> Confirmo que tengo derecho a ofrecer este producto y que no contiene datos personales, credenciales, información financiera ni material ilícito.</label>
+      <div class="seller-product-actions"><button class="cc-action" id="sellerProductSave" type="submit">Enviar producto a revisión</button><button class="cc-action secondary" id="sellerProductCancel" type="button">Cancelar edición</button></div>
+      <div id="sellerProductNotice" class="dash-notice" role="status"></div>
+    </form>
+    <h3 style="margin-top:22px">Mis publicaciones</h3>
+    <div id="sellerProductList" class="order-list"><div class="cc-empty">Cargando tus productos…</div></div>
+  </div>
 </section>
 <section class="dash-box client-page" data-panel="referral"><h3>📡 Referral</h3><p class="page-intro">Comparte tu invitación a CARTOON CC.</p><div class="cc-empty">Tu invitación personal estará disponible cuando se active el sistema de referidos.</div></section>
 <section class="dash-box client-page" data-panel="support"><h3>🐬 Support</h3><p class="page-intro">Centro de ayuda CC.</p><div class="cc-empty">El soporte estará disponible próximamente. Conserva el número de tu pedido para solicitar ayuda.</div></section>
@@ -379,12 +410,52 @@
   const profileBox=document.querySelector('#profileForm')?.parentElement;if(profileBox)$('accountProfileMount').append(profileBox);$('accountProfileMount').append($('profileNotice'));
 
 
+  let sellerStoreName='';
+  function sellerNotice(message,isError=false){const el=$('sellerProductNotice');el.textContent=message;el.classList.add('show');el.classList.toggle('error',isError)}
+  function sellerResetProductForm(){ $('sellerProductForm').reset();$('sellerProductId').value='';$('sellerProductSave').textContent='Enviar producto a revisión'; }
+  async function loadSellerProducts(){
+    const {data:{user}}=await client.auth.getUser();if(!user)return;
+    const host=$('sellerProductList');host.replaceChildren();
+    const {data,error}=await client.from('products').select('id,name,description,price,currency,active,availability,category,brand,country,product_type,face_value').eq('seller_id',user.id).order('created_at',{ascending:false});
+    if(error){host.textContent='No se pudieron cargar tus publicaciones.';return}
+    if(!data||!data.length){const empty=document.createElement('div');empty.className='cc-empty';empty.textContent='Todavía no has publicado productos.';host.append(empty);return}
+    data.forEach(p=>{
+      const card=document.createElement('article');card.className='seller-product-card';
+      const title=document.createElement('strong');title.textContent=p.name;
+      const state=document.createElement('span');state.className='seller-state';state.textContent=p.active?' · Publicado':' · Pendiente de revisión';
+      const detail=document.createElement('small');detail.textContent=ccMoney(p.price,p.currency)+' · '+(p.category||'Sin categoría')+' · '+({available:'Disponible',unavailable:'No disponible',preorder:'Preventa'}[p.availability]||p.availability);
+      const edit=document.createElement('button');edit.type='button';edit.className='cc-action';edit.textContent='Editar';
+      edit.addEventListener('click',()=>{
+        $('sellerProductId').value=p.id;$('sellerProductName').value=p.name;$('sellerProductDescription').value=p.description||'';
+        $('sellerProductFaceValue').value=p.face_value;$('sellerProductPrice').value=p.price;$('sellerProductCurrency').value=p.currency;
+        $('sellerProductCountry').value=p.country||'';$('sellerProductCategory').value=p.category||'other';$('sellerProductBrand').value=p.brand||'';
+        $('sellerProductType').value=p.product_type||'';$('sellerProductAvailability').value=p.availability||'available';
+        $('sellerProductLegal').checked=false;$('sellerProductSave').textContent='Guardar cambios y reenviar a revisión';
+        $('sellerProductName').scrollIntoView({behavior:'smooth',block:'center'});
+      });
+      card.append(title,state,detail,edit);
+      if(!p.active){const del=document.createElement('button');del.type='button';del.className='cc-action secondary';del.textContent='Eliminar';del.addEventListener('click',async()=>{
+        if(!window.confirm('¿Eliminar esta publicación pendiente?'))return;
+        del.disabled=true;const {error:delError}=await client.from('products').delete().eq('id',p.id);
+        if(delError){sellerNotice(delError.message,true);del.disabled=false;return}await loadSellerProducts();
+      });card.append(del)}
+      host.append(card);
+    });
+  }
   async function loadSellerApplication(){
     const {data:{user}}=await client.auth.getUser();if(!user)return;
     if(!$('sellerContactEmail').value)$('sellerContactEmail').value=user.email||'';
     const {data,error}=await client.from('seller_applications').select('store_name,status,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
     const host=$('sellerApplicationStatus');if(error){host.textContent='No se pudo consultar el estado de tu solicitud.';return}
-    if(data){host.textContent='Solicitud: '+data.store_name+' · Estado: '+({pending:'En revisión',approved:'Aprobada',rejected:'No aprobada'}[data.status]||data.status);$('sellerSubmit').disabled=data.status==='pending'||data.status==='approved';}
+    if(data){
+      sellerStoreName=data.store_name;
+      host.textContent='Solicitud: '+data.store_name+' · Estado: '+({pending:'En revisión',approved:'Aprobada',rejected:'No aprobada'}[data.status]||data.status);
+      $('sellerSubmit').disabled=data.status==='pending'||data.status==='approved';
+      $('sellerStorePanel').classList.toggle('hidden',data.status!=='approved');
+      if(data.status==='approved')await loadSellerProducts();
+    }else{
+      $('sellerStorePanel').classList.add('hidden');$('sellerSubmit').disabled=false;
+    }
   }
   $('sellerApplicationForm').addEventListener('submit',async e=>{
     e.preventDefault();const notice=$('sellerApplicationNotice');notice.classList.add('show');notice.classList.remove('error');
@@ -395,6 +466,31 @@
     if(error){notice.textContent=error.message||'No se pudo enviar la solicitud.';notice.classList.add('error');btn.disabled=false;btn.textContent='Enviar solicitud';return}
     notice.textContent='Solicitud enviada. Tu tienda quedará pendiente de revisión.';$('sellerApplicationStatus').textContent='Solicitud: '+payload.store_name+' · Estado: En revisión';btn.textContent='Solicitud enviada';
   });
+  $('sellerProductForm').addEventListener('submit',async e=>{
+    e.preventDefault();const btn=$('sellerProductSave');btn.disabled=true;
+    try{
+      const {data:{user}}=await client.auth.getUser();if(!user)throw new Error('Inicia sesión nuevamente.');
+      if(!$('sellerProductLegal').checked)throw new Error('Confirma que el producto cumple las reglas de publicación.');
+      const payload={
+        name:$('sellerProductName').value.trim(),description:$('sellerProductDescription').value.trim(),
+        face_value:Number($('sellerProductFaceValue').value),price:Number($('sellerProductPrice').value),
+        currency:$('sellerProductCurrency').value,country:$('sellerProductCountry').value.trim()||null,
+        category:$('sellerProductCategory').value,brand:$('sellerProductBrand').value.trim()||null,
+        product_type:$('sellerProductType').value.trim()||null,seller_name:sellerStoreName,
+        availability:$('sellerProductAvailability').value,active:false
+      };
+      if(!payload.name||!Number.isFinite(payload.face_value)||payload.face_value<=0||!Number.isFinite(payload.price)||payload.price<0)throw new Error('Revisa el nombre, el valor nominal y el precio.');
+      const productId=$('sellerProductId').value;
+      const result=productId
+        ? await client.from('products').update(payload).eq('id',productId).eq('seller_id',user.id)
+        : await client.from('products').insert({...payload,seller_id:user.id});
+      if(result.error)throw result.error;
+      sellerResetProductForm();sellerNotice('Producto enviado a revisión. No aparecerá en el catálogo hasta que administración lo apruebe.');
+      await loadSellerProducts();
+    }catch(error){sellerNotice(error.message||'No se pudo guardar el producto.',true)}
+    finally{btn.disabled=false;btn.textContent=$('sellerProductId').value?'Guardar cambios y reenviar a revisión':'Enviar producto a revisión'}
+  });
+  $('sellerProductCancel').addEventListener('click',sellerResetProductForm);
 
   client.auth.onAuthStateChange(async (event, session) => {
     if (event === "PASSWORD_RECOVERY" && session) {
