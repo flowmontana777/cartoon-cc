@@ -328,7 +328,7 @@
     document.querySelectorAll('[data-panel]').forEach(el=>el.classList.toggle('active',el.dataset.panel===name));
     document.querySelectorAll('[data-page]').forEach(el=>el.classList.toggle('active',el.dataset.page===name));
     const panel=document.querySelector('[data-panel="'+name+'"]');if(panel){panel.classList.remove('page-flash');void panel.offsetWidth;panel.classList.add('page-flash')}
-    $('userMenu').classList.add('hidden');if(name==='buy'||name==='cards'){ccLoadProducts().then(()=>{if(name==='cards')ccRenderCards()})}if(name==='seller')loadSellerApplication()if(name==='cart')ccRenderCart();if(name==='mycc')ccRenderMyCC();
+    $('userMenu').classList.add('hidden');if(name==='buy'||name==='cards'){ccLoadProducts().then(()=>{if(name==='cards')ccRenderCards()})}if(name==='seller')loadSellerApplication();if(name==='cart')ccRenderCart();if(name==='mycc')ccRenderMyCC();
   }
   document.querySelectorAll('[data-page]').forEach(btn=>btn.addEventListener('click',()=>ccPage(btn.dataset.page)));
   $('userMenuToggle').addEventListener('click',()=>$('userMenu').classList.toggle('hidden'));
