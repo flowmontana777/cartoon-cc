@@ -33,6 +33,12 @@
 @media(max-width:650px){.cc-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:420px){.cc-filter-grid{grid-template-columns:1fr}}
 
+
+.seller-form{display:grid;gap:13px;max-width:650px}
+.seller-form label{display:grid;gap:6px;color:#cfe4d0;font-size:12px;font-weight:800}
+.seller-form input,.seller-form select,.seller-form textarea{width:100%;box-sizing:border-box;border:1px solid #435342;border-radius:11px;padding:12px;background:#101810;color:#f0f7ed;font:inherit;font-size:13px}
+.seller-form input:focus,.seller-form select:focus,.seller-form textarea:focus{outline:2px solid #9bdc44;outline-offset:1px}
+
 </style>
 </head>
 <body>
@@ -61,7 +67,7 @@
 <button type="button" class="active" data-page="news">📰 News</button><button type="button" data-page="bases">🪸 List Bases</button><button type="button" data-page="cards">💳 Cards</button><button type="button" data-page="buy">🪙 Buy CC</button><button type="button" data-page="balance">💎 Add Balance</button><button type="button" data-page="cart">🛒 Cart <span id="clientCartCount">0</span></button><button type="button" data-page="support">🐬 Support</button>
 <div class="user-menu-wrap"><button type="button" class="user-trigger" id="userMenuToggle">🌊 <span id="menuUserName">CC Member</span> ▾</button>
 <div class="user-menu hidden" id="userMenu"><div class="menu-profile">🌊 <span id="menuUserFull">CC Member</span><small>CC Member</small></div>
-<button type="button" class="menu-link" data-page="account">🪪 Account</button><button type="button" class="menu-link" data-page="balance">💎 Add Balance</button><button type="button" class="menu-link" data-page="mycc">🪙 My CC</button><button type="button" class="menu-link" data-page="referral">📡 Referral</button><button type="button" class="menu-link logout-menu" id="menuLogout">🚪 Logout</button></div></div></nav>
+<button type="button" class="menu-link" data-page="account">🪪 Account</button><button type="button" class="menu-link" data-page="balance">💎 Add Balance</button><button type="button" class="menu-link" data-page="mycc">🪙 My CC</button><button type="button" class="menu-link" data-page="referral">📡 Referral</button><button type="button" class="menu-link" data-page="seller">🏪 Convertirse en vendedor</button><button type="button" class="menu-link logout-menu" id="menuLogout">🚪 Logout</button></div></div></nav>
 <div id="clientPages">
 <section class="dash-box client-page active" data-panel="news"><h3>📰 News</h3><p class="page-intro">Novedades y avisos de CARTOON CC.</p><div class="cc-empty">Bienvenido a CC. Aquí aparecerán los anuncios y novedades oficiales de la plataforma.</div></section>
 <section class="dash-box client-page" data-panel="bases"><h3>🪸 List Bases</h3><p class="page-intro">Explora las listas disponibles en CC.</p><div class="cc-empty">Todavía no hay listas publicadas. Cuando haya contenido disponible aparecerá aquí.</div></section>
@@ -92,6 +98,28 @@
 <section class="dash-box client-page" data-panel="balance"><h3>💎 Add Balance</h3><p class="page-intro">Consulta cómo añadir saldo a tu cuenta CC.</p><div class="cc-empty">La recarga de saldo aún no está habilitada. Próximamente se publicarán los métodos de pago oficiales. No envíes dinero a cuentas no verificadas.</div></section>
 <section class="dash-box client-page" data-panel="cart"><h3>🛒 Cart</h3><p class="page-intro">Revisa tus artículos antes de crear el pedido.</p><div id="clientCartItems"></div><div id="clientCartTotal" class="order-meta"></div><button type="button" class="cc-action" id="clientCheckout">Confirmar pedido</button><div class="dash-notice" id="cartNotice"></div></section>
 <section class="dash-box client-page" data-panel="mycc"><h3>🪙 My CC</h3><p class="page-intro">Consulta tus pedidos y el estado de tus compras CC.</p><div id="myCcOrders" class="order-list"><div class="cc-empty">Cargando tus compras…</div></div></section>
+
+<section class="dash-box client-page" data-panel="seller">
+  <h3>🏪 Convertirse en vendedor</h3>
+  <p class="page-intro">Solicita abrir tu tienda dentro de CC. Nuestro equipo revisará tu solicitud antes de activar las ventas.</p>
+  <form id="sellerApplicationForm" class="seller-form">
+    <label>Nombre de tu tienda<input id="sellerStoreName" maxlength="80" minlength="2" required placeholder="Ej. Mi tienda CC"></label>
+    <label>Qué deseas ofrecer
+      <select id="sellerCategory" required>
+        <option value="digital_goods">Productos digitales legales</option>
+        <option value="art_design">Arte y diseño</option>
+        <option value="software">Software y herramientas autorizadas</option>
+        <option value="collectibles">Coleccionables</option>
+        <option value="other">Otros productos permitidos</option>
+      </select>
+    </label>
+    <label>Descripción de tu tienda<textarea id="sellerDescription" maxlength="1000" rows="4" placeholder="Describe los productos que ofrecerás en CC."></textarea></label>
+    <label>Correo de contacto<input id="sellerContactEmail" type="email" maxlength="254" required placeholder="tu@correo.com"></label>
+    <button class="cc-action" id="sellerSubmit" type="submit">Enviar solicitud</button>
+    <div id="sellerApplicationNotice" class="dash-notice" role="status"></div>
+  </form>
+  <div id="sellerApplicationStatus" class="cc-empty" style="margin-top:14px">Aún no has enviado una solicitud de vendedor.</div>
+</section>
 <section class="dash-box client-page" data-panel="referral"><h3>📡 Referral</h3><p class="page-intro">Comparte tu invitación a CARTOON CC.</p><div class="cc-empty">Tu invitación personal estará disponible cuando se active el sistema de referidos.</div></section>
 <section class="dash-box client-page" data-panel="support"><h3>🐬 Support</h3><p class="page-intro">Centro de ayuda CC.</p><div class="cc-empty">El soporte estará disponible próximamente. Conserva el número de tu pedido para solicitar ayuda.</div></section>
 <section class="dash-box client-page" data-panel="account"><h3>🪪 Account</h3><p class="page-intro">Actualiza los datos de tu perfil.</p><div id="accountProfileMount"></div></section></div><div class="dash-grid"><section class="dash-box"><h3>Mi perfil</h3><form id="profileForm"><label class="field"><span>Nombre</span><input id="profileNameInput" type="text" maxlength="80" placeholder="Tu nombre"></label><label class="field"><span>Correo electrónico</span><input id="profileEmailInput" type="email" readonly></label><button class="dash-save" id="saveProfileButton" type="submit">Guardar cambios</button></form><div class="dash-notice" id="profileNotice" role="status" aria-live="polite"></div></section>
@@ -300,7 +328,7 @@
     document.querySelectorAll('[data-panel]').forEach(el=>el.classList.toggle('active',el.dataset.panel===name));
     document.querySelectorAll('[data-page]').forEach(el=>el.classList.toggle('active',el.dataset.page===name));
     const panel=document.querySelector('[data-panel="'+name+'"]');if(panel){panel.classList.remove('page-flash');void panel.offsetWidth;panel.classList.add('page-flash')}
-    $('userMenu').classList.add('hidden');if(name==='buy'||name==='cards'){ccLoadProducts().then(()=>{if(name==='cards')ccRenderCards()})}if(name==='cart')ccRenderCart();if(name==='mycc')ccRenderMyCC();
+    $('userMenu').classList.add('hidden');if(name==='buy'||name==='cards'){ccLoadProducts().then(()=>{if(name==='cards')ccRenderCards()})}if(name==='seller')loadSellerApplication()if(name==='cart')ccRenderCart();if(name==='mycc')ccRenderMyCC();
   }
   document.querySelectorAll('[data-page]').forEach(btn=>btn.addEventListener('click',()=>ccPage(btn.dataset.page)));
   $('userMenuToggle').addEventListener('click',()=>$('userMenu').classList.toggle('hidden'));
@@ -336,6 +364,24 @@
   $('clientCheckout').addEventListener('click',async()=>{const notice=$('cartNotice');notice.classList.add('show');notice.classList.remove('error');if(!ccCart.length){notice.textContent='Tu carrito está vacío.';return}if(new Set(ccCart.map(x=>x.currency)).size>1){notice.textContent='Separa los productos de distintas monedas en pedidos diferentes.';notice.classList.add('error');return}const btn=$('clientCheckout');btn.disabled=true;btn.textContent='Creando pedido…';try{const {data,error}=await client.rpc('create_order',{p_items:ccCart.map(x=>({product_id:x.id,quantity:x.quantity}))});if(error)throw error;ccCart.length=0;$('clientCartCount').textContent='0';ccRenderCart();notice.textContent='Pedido '+String(data.id).slice(0,8).toUpperCase()+' creado. Total '+ccMoney(data.subtotal,data.currency)+'. Estado: pendiente.';activeDashboardUserId=null;const {data:{user}}=await client.auth.getUser();if(user)await loadCustomerDashboard(user)}catch(error){notice.textContent=error.message||'No se pudo crear el pedido.';notice.classList.add('error')}finally{btn.disabled=false;btn.textContent='Confirmar pedido'}});
   function ccRenderMyCC(){const host=$('myCcOrders');host.replaceChildren();const cards=document.querySelectorAll('#orderList .order-card');if(!cards.length){const empty=document.createElement('div');empty.className='cc-empty';empty.textContent='Todavía no tienes compras CC registradas.';host.append(empty);return}cards.forEach(card=>host.append(card.cloneNode(true)))}
   const profileBox=document.querySelector('#profileForm')?.parentElement;if(profileBox)$('accountProfileMount').append(profileBox);$('accountProfileMount').append($('profileNotice'));
+
+
+  async function loadSellerApplication(){
+    const {data:{user}}=await client.auth.getUser();if(!user)return;
+    if(!$('sellerContactEmail').value)$('sellerContactEmail').value=user.email||'';
+    const {data,error}=await client.from('seller_applications').select('store_name,status,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
+    const host=$('sellerApplicationStatus');if(error){host.textContent='No se pudo consultar el estado de tu solicitud.';return}
+    if(data){host.textContent='Solicitud: '+data.store_name+' · Estado: '+({pending:'En revisión',approved:'Aprobada',rejected:'No aprobada'}[data.status]||data.status);$('sellerSubmit').disabled=data.status==='pending'||data.status==='approved';}
+  }
+  $('sellerApplicationForm').addEventListener('submit',async e=>{
+    e.preventDefault();const notice=$('sellerApplicationNotice');notice.classList.add('show');notice.classList.remove('error');
+    const {data:{user}}=await client.auth.getUser();if(!user){notice.textContent='Inicia sesión para enviar tu solicitud.';notice.classList.add('error');return}
+    const payload={user_id:user.id,store_name:$('sellerStoreName').value.trim(),category:$('sellerCategory').value,description:$('sellerDescription').value.trim(),contact_email:$('sellerContactEmail').value.trim(),status:'pending'};
+    const btn=$('sellerSubmit');btn.disabled=true;btn.textContent='Enviando…';
+    const {error}=await client.from('seller_applications').insert(payload);
+    if(error){notice.textContent=error.message||'No se pudo enviar la solicitud.';notice.classList.add('error');btn.disabled=false;btn.textContent='Enviar solicitud';return}
+    notice.textContent='Solicitud enviada. Tu tienda quedará pendiente de revisión.';$('sellerApplicationStatus').textContent='Solicitud: '+payload.store_name+' · Estado: En revisión';btn.textContent='Solicitud enviada';
+  });
 
   client.auth.onAuthStateChange(async (event, session) => {
     if (event === "PASSWORD_RECOVERY" && session) {
