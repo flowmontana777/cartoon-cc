@@ -47,6 +47,14 @@
 .seller-product-card strong{font-size:13px}.seller-product-card small{display:block;color:#9aa394;font-size:10px;margin:6px 0}
 .seller-product-card button{margin:7px 7px 0 0}.seller-state{font-size:10px;color:#c5f58b;font-weight:900}
 @media(max-width:600px){.seller-product-fields{grid-template-columns:1fr}}
+
+.cc-demo-person{margin-top:18px;padding:16px;border:1px solid #4a6233;border-radius:14px;background:#101810}
+.cc-demo-label{display:inline-block;padding:6px 9px;border-radius:8px;background:#26391c;color:#c8f59b;font-size:9px;font-weight:950;letter-spacing:1px}
+.cc-demo-person h4{margin:12px 0 5px;font-size:14px}.cc-demo-person p{margin:0 0 12px;color:#aab5a4;font-size:11px;line-height:1.5}
+.cc-demo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cc-demo-grid label{display:grid;gap:5px;color:#cbd7c6;font-size:10px;font-weight:800}
+.cc-demo-grid input{width:100%;min-width:0;box-sizing:border-box;padding:11px;border:1px solid #344331;border-radius:9px;background:#090d09;color:#9aa394;font:inherit}
+@media(max-width:520px){.cc-demo-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -78,7 +86,7 @@
 <button type="button" class="menu-link" data-page="account">🪪 Account</button><button type="button" class="menu-link" data-page="balance">💎 Add Balance</button><button type="button" class="menu-link" data-page="mycc">🪙 My CC</button><button type="button" class="menu-link" data-page="referral">📡 Referral</button><button type="button" class="menu-link" data-page="seller">🏪 Convertirse en vendedor</button><button type="button" class="menu-link logout-menu" id="menuLogout">🚪 Logout</button></div></div></nav>
 <div id="clientPages">
 <section class="dash-box client-page active" data-panel="news"><h3>📰 News</h3><p class="page-intro">Novedades y avisos de CARTOON CC.</p><div class="cc-empty">Bienvenido a CC. Aquí aparecerán los anuncios y novedades oficiales de la plataforma.</div></section>
-<section class="dash-box client-page" data-panel="bases"><h3>🪸 List Bases</h3><p class="page-intro">Explora las listas disponibles en CC.</p><div class="cc-empty">Todavía no hay listas publicadas. Cuando haya contenido disponible aparecerá aquí.</div></section>
+<section class="dash-box client-page" data-panel="bases"><h3>🪸 List Bases</h3><p class="page-intro">Explora las listas disponibles en CC.</p><div class="cc-empty">Todavía no hay listas publicadas. Cuando haya contenido disponible aparecerá aquí.</div><div class="cc-demo-person" id="basesDemoForm"><div class="cc-demo-label">DATOS FICTICIOS · SOLO DEMOSTRACIÓN</div><h4>Formulario de ejemplo</h4><p>Estos valores son inventados, están deshabilitados y no se guardan ni se envían.</p><div class="cc-demo-grid"><label>Nombre<input disabled value="Persona Demo"></label><label>SSN<input disabled value="XXX-XX-XXXX"></label><label>Fecha de nacimiento<input disabled value="MM/DD/AAAA"></label><label>Teléfono<input disabled value="000-000-0000"></label><label>IP<input disabled value="0.0.0.0"></label><label>Dirección<input disabled value="Dirección ficticia"></label></div></div></section>
 
 <section class="dash-box client-page" data-panel="cards">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
@@ -109,7 +117,7 @@
   <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0;color:#cceeff;font-size:12px"><span id="cardsPageLabel">PAGE 1</span><span id="cardsTotalLabel">TOTAL PRODUCTS 0</span></div>
   <div id="cardsProductList" class="cc-product-grid"><div class="cc-empty">Cargando catálogo…</div></div>
 </section>
-<section class="dash-box client-page" data-panel="buy"><h3>🪙 Buy CC</h3><p class="page-intro">Selecciona un producto del catálogo para agregarlo al carrito.</p><div id="clientProducts" class="cc-product-grid"><div class="cc-empty">Cargando catálogo…</div></div></section>
+<section class="dash-box client-page" data-panel="buy"><h3>🪙 Buy CC</h3><p class="page-intro">Selecciona un producto del catálogo para agregarlo al carrito.</p><div id="clientProducts" class="cc-product-grid"><div class="cc-empty">Cargando catálogo…</div></div><div class="cc-demo-person" id="buyDemoForm"><div class="cc-demo-label">DATOS FICTICIOS · SOLO DEMOSTRACIÓN</div><h4>Formulario de ejemplo</h4><p>Estos valores son inventados, están deshabilitados y no se guardan ni se envían.</p><div class="cc-demo-grid"><label>Nombre<input disabled value="Persona Demo"></label><label>SSN<input disabled value="XXX-XX-XXXX"></label><label>Fecha de nacimiento<input disabled value="MM/DD/AAAA"></label><label>Teléfono<input disabled value="000-000-0000"></label><label>IP<input disabled value="0.0.0.0"></label><label>Dirección<input disabled value="Dirección ficticia"></label></div></div></section>
 <section class="dash-box client-page" data-panel="balance"><h3>💎 Add Balance</h3><p class="page-intro">Consulta cómo añadir saldo a tu cuenta CC.</p><div class="cc-empty">La recarga de saldo aún no está habilitada. Próximamente se publicarán los métodos de pago oficiales. No envíes dinero a cuentas no verificadas.</div></section>
 <section class="dash-box client-page" data-panel="cart"><h3>🛒 Cart</h3><p class="page-intro">Revisa tus artículos antes de crear el pedido.</p><div id="clientCartItems"></div><div id="clientCartTotal" class="order-meta"></div><button type="button" class="cc-action" id="clientCheckout">Confirmar pedido</button><div class="dash-notice" id="cartNotice"></div></section>
 <section class="dash-box client-page" data-panel="mycc"><h3>🪙 My CC</h3><p class="page-intro">Consulta tus pedidos y el estado de tus compras CC.</p><div id="myCcOrders" class="order-list"><div class="cc-empty">Cargando tus compras…</div></div></section>
